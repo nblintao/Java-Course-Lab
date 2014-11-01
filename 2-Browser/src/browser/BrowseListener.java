@@ -8,7 +8,14 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
 public class BrowseListener implements ActionListener {
+	private JPanel pageView;
+	BrowseListener(JPanel pageView){
+		this.pageView = pageView;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -17,9 +24,13 @@ public class BrowseListener implements ActionListener {
 			sourceURL = new URL(e.getActionCommand());
 			BufferedReader in = new BufferedReader(new InputStreamReader(sourceURL.openStream()));
 			String buf;
-			while(!(null==(buf=in.readLine()))){
+			int count = 0;
+			while(!(null==(buf=in.readLine())) && count < 10){
 				System.out.println(buf);
-				
+				JTextArea text = new JTextArea(buf);
+				text.setEditable(false);
+				pageView.add(text);
+				count++;
 			}
 			
 		} catch (MalformedURLException e1) {
