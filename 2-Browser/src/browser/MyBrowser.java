@@ -1,12 +1,14 @@
 package browser;
 
 import java.awt.*;
-import java.awt.event.*;
 
 import javax.swing.*;
 
+
 public class MyBrowser extends JFrame{
 	private static final long serialVersionUID = -579949100353474747L;
+	private static BrowseListener browseListener = new BrowseListener();
+	
 	MyBrowser(){
 		super("MyBrowser");
 		
@@ -36,14 +38,7 @@ public class MyBrowser extends JFrame{
 //		BrowseListener browseListener = new BrowseListener();
 		JTextField urlField = new JTextField();
 //		urlField.addActionListener(browseListener);
-		urlField.addActionListener(
-				new ActionListener(){
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						System.out.println("brose: " + e.getActionCommand());						
-					}
-				}
-		);
+		urlField.addActionListener(browseListener);
 		
 		navigator.add(urlField);
 
@@ -52,12 +47,17 @@ public class MyBrowser extends JFrame{
 		
 		content.add(navigator, BorderLayout.NORTH);
 
-		TextArea txt = new TextArea();
-
-		content.add(txt, BorderLayout.CENTER);
-
-//		JTextField stu = new JTextField();
-//		content.add(stu, BorderLayout.SOUTH);
+		JPanel pageView = new JPanel();
+		pageView.setLayout(new GridLayout(0,1));
+		
+		for(int i=0;i<100;i++){
+			JTextArea text = new JTextArea(content.getBounds().width + "" + i);
+			text.setEditable(false);
+			pageView.add(text);
+		}
+		
+		
+		content.add(new JScrollPane(pageView), BorderLayout.CENTER);
 	}
 	public static void main(String[] argv){
 		MyBrowser myBrowser = new MyBrowser();
