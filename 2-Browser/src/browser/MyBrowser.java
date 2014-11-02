@@ -26,6 +26,8 @@ public class MyBrowser extends JFrame{
 		Dimension dimension = toolkit.getScreenSize();
 		setBounds(dimension.width/4,dimension.height/4,dimension.width/2,dimension.height/2); 
 		
+//		pageView.setBounds(getBounds());
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	public void InitializeLayout(){

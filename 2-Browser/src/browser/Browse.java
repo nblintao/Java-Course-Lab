@@ -1,10 +1,15 @@
 package browser;
 
+import java.awt.Font;
+import java.awt.TextArea;
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
+import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.ParagraphTag;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.util.NodeList;
@@ -38,27 +43,34 @@ public class Browse {
 		SimpleNodeIterator iterator = nodeList.elements();
 		while(iterator.hasMoreNodes()){
 			Node node = iterator.nextNode();
-//			System.out.println(node.getText());
-			if(node instanceof TableTag){
-				browseTable((TableTag)node, panel);
-			}
-			else if(node instanceof ParagraphTag){
+
+			if(node instanceof ParagraphTag){
 				browseParagraph((ParagraphTag)node, panel);
-				
+			}			
+			else if(node instanceof ImageTag){
+				browseImage((ImageTag)node, panel);
+			}
+			else if(node instanceof TableTag){
+				browseTable((TableTag)node, panel);
 			}
 			else{
 				NodeList childnodeList = node.getChildren();
 				browseTrivial(childnodeList, panel);				
 			}
-
 		}
+	}
+	public void browseParagraph(ParagraphTag paragraph, JPanel panel){
+//		System.out.println(paragraph.toString());
+		JLabel text = new JLabel(paragraph.getStringText());
+		text.setFont(new Font("微软雅黑", Font.PLAIN, 16));
+//		text.setEditable(false);
+		panel.add(text);
+		panel.revalidate();
+	}
+	public void browseImage(ImageTag image, JPanel panel){
+		
 	}
 	public void browseTable(TableTag table, JPanel panel){
 		//TODO
-	}
-	public void browseParagraph(ParagraphTag paragraph, JPanel panel){
-		JTextArea text = new JTextArea(paragraph.getStringText());
-		text.setEditable(false);
-		panel.add(text);
 	}
 }
