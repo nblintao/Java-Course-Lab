@@ -1,11 +1,15 @@
 package browser;
 
 import java.awt.Font;
-import java.awt.TextArea;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
@@ -17,6 +21,7 @@ import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SimpleNodeIterator;
 
 public class Browse {
+	private static int imageCacheCounter = 0;
 	public void browseInitial(String url, JPanel pageView){
 		Parser parser = null;
 		try {
@@ -48,11 +53,16 @@ public class Browse {
 				browseParagraph((ParagraphTag)node, panel);
 			}			
 			else if(node instanceof ImageTag){
-				browseImage((ImageTag)node, panel);
+				try {
+					browseImage((ImageTag)node, panel);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			else if(node instanceof TableTag){
-				browseTable((TableTag)node, panel);
-			}
+//			else if(node instanceof TableTag){
+//				browseTable((TableTag)node, panel);
+//			}
 			else{
 				NodeList childnodeList = node.getChildren();
 				browseTrivial(childnodeList, panel);				
@@ -67,8 +77,31 @@ public class Browse {
 		panel.add(text);
 		panel.revalidate();
 	}
-	public void browseImage(ImageTag image, JPanel panel){
+	public void browseImage(ImageTag image, JPanel panel) throws Exception{
 		
+		
+		String urlText = image.getImageURL();
+		System.out.println(urlText);
+		
+		//TODO need advanced hash algorithm
+//		String hashedName = urlText.substring(urlText.lastIndexOf('/')+1);
+		imageCacheCounter++;
+		String hashedName = String.valueOf(imageCacheCounter);
+		
+		URL url = new URL(urlText);
+		InputStream is = url.openStream();
+		File imageFile = new File("./ImageCache/" + hashedName);
+
+		OutputStream os = new FileOutputStream(imageFile);
+        int bytesRead = 0;
+        byte[] buffer = new byte[8192];
+        while((bytesRead = is.read(buffer,0,8192))!=-1)
+        	os.write(buffer,0,bytesRead);
+        os.close();
+        JLabel imageLabel = new JLabel();        
+        imageLabel.setIcon(new ImageIcon(imageFile.getAbsolutePath()));
+        panel.add(imageLabel);
+	    
 	}
 	public void browseTable(TableTag table, JPanel panel){
 		//TODO

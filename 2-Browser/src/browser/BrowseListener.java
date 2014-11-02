@@ -12,7 +12,7 @@ public class BrowseListener implements ActionListener {
 	
 	BrowseListener(JPanel pageView){
 		this.pageView = pageView;
-		browse = new Browse();
+		browse = new Browse();		
 	}
 
 	@Override

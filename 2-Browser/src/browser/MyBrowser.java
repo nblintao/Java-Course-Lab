@@ -1,6 +1,8 @@
 package browser;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.File;
 
 import javax.swing.*;
 
@@ -17,6 +19,10 @@ public class MyBrowser extends JFrame{
 		
 		InitializeFrame();
 		InitializeLayout();
+		
+		File file = new File("./ImageCache");
+		if  (!file.exists() && !file.isDirectory()) 
+			file.mkdir();
 		
 	}
 	public void InitializeFrame(){
@@ -53,6 +59,7 @@ public class MyBrowser extends JFrame{
 		content.add(navigator, BorderLayout.NORTH);
 
 		pageView.setLayout(new GridLayout(0,1));
+//		pageView.setLayout(new GridBagLayout());
 		
 //		for(int i=0;i<100;i++){
 //			JTextArea text = new JTextArea(content.getBounds().width + "" + i);
@@ -67,5 +74,7 @@ public class MyBrowser extends JFrame{
 		MyBrowser myBrowser = new MyBrowser();
 		System.out.println("Initialize finished.");
 		myBrowser.setVisible(true);
+		
+		browseListener.actionPerformed(new ActionEvent(new JTextField(), 412348921, "http://www.cad.zju.edu.cn/home/vagblog/"));
 	}
 }
