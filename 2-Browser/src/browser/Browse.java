@@ -10,6 +10,7 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
@@ -71,11 +72,15 @@ public class Browse {
 	}
 	public void browseParagraph(ParagraphTag paragraph, JPanel panel){
 //		System.out.println(paragraph.toString());
-		JLabel text = new JLabel(paragraph.getStringText());
+//		JLabel text = new JLabel(paragraph.getStringText());
+		JTextArea text = new JTextArea(paragraph.getStringText());
 		text.setFont(new Font("微软雅黑", Font.PLAIN, 16));
-//		text.setEditable(false);
+		text.setEditable(false);
 		panel.add(text);
 		panel.revalidate();
+		NodeList nodeList = paragraph.getChildren();
+		browseTrivial(nodeList, panel);
+		
 	}
 	public void browseImage(ImageTag image, JPanel panel) throws Exception{
 		
