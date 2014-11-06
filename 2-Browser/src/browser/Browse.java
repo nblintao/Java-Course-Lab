@@ -1,6 +1,9 @@
 package browser;
 
+import java.awt.Component;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -23,6 +26,7 @@ import org.htmlparser.util.SimpleNodeIterator;
 
 public class Browse {
 	private static int imageCacheCounter = 0;
+	static GridBagConstraints s = new GridBagConstraints();
 	public void browseInitial(String url, JPanel pageView){
 		Parser parser = null;
 		try {
@@ -76,7 +80,11 @@ public class Browse {
 		JTextArea text = new JTextArea(paragraph.getStringText());
 		text.setFont(new Font("微软雅黑", Font.PLAIN, 16));
 		text.setEditable(false);
+		text.setLineWrap(true);
 		panel.add(text);
+		
+		setGridBagConstraints(text, panel);
+		
 		panel.revalidate();
 		NodeList nodeList = paragraph.getChildren();
 		browseTrivial(nodeList, panel);
@@ -106,9 +114,20 @@ public class Browse {
         JLabel imageLabel = new JLabel();        
         imageLabel.setIcon(new ImageIcon(imageFile.getAbsolutePath()));
         panel.add(imageLabel);
+        
+        setGridBagConstraints(imageLabel, panel);
+        
+        panel.revalidate();
 	    
 	}
 	public void browseTable(TableTag table, JPanel panel){
 		//TODO
+	}
+	public void setGridBagConstraints(Component in, JPanel out){
+        s.fill = GridBagConstraints.HORIZONTAL;
+        s.gridwidth = 0;
+        s.weightx = 0;
+        s.weighty = 0;
+        ((GridBagLayout)out.getLayout()).setConstraints(in, s);
 	}
 }
