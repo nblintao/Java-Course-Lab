@@ -80,7 +80,7 @@ public class Browse {
 		JTextArea text = new JTextArea(paragraph.getStringText());
 		text.setFont(new Font("微软雅黑", Font.PLAIN, 16));
 		text.setEditable(false);
-		text.setLineWrap(true);
+//		text.setLineWrap(true);
 		panel.add(text);
 		
 		setGridBagConstraints(text, panel);

@@ -2,42 +2,51 @@ package browser;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
+import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 public class BrowseListener implements ActionListener {
 	private JPanel pageView;
+	private JEditorPane jep;
+	private int mode;
 	public static Browse browse;
 	
-	BrowseListener(JPanel pageView){
-		this.pageView = pageView;
-		browse = new Browse();		
+	BrowseListener(int mode,JPanel pageView, JEditorPane jep){
+		this.pageView = pageView;		
+		this.jep = jep;
+		this.mode = mode;
+		browse = new Browse();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String url = e.getActionCommand();
 		pageView.removeAll();
-		try {
-//			URL sourceURL = new URL(e.getActionCommand());
-//			BufferedReader in = new BufferedReader(new InputStreamReader(sourceURL.openStream()));
-//			String buf;
-//			while(!(null==(buf=in.readLine()))){
-//				System.out.println(buf);
-//				JTextArea text = new JTextArea(buf);
-//				text.setEditable(false);
-//				pageView.add(text);
-//				
-//			}
+			if(mode == 0){
+				try {
+					browse.browseInitial(url, pageView);
+					System.out.println(e.getActionCommand() + " is parsed successfully.");
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					pageView.add(new JTextArea("555~ I can't find "+ e.getActionCommand()));
+					System.out.println(e.getActionCommand() + " is parsed unsuccessfully.");
+				}
 
-			browse.browseInitial(url, pageView);
-			
-			System.out.println(e.getActionCommand() + " is parsed successfully.");
-		} catch (Exception e1) {
-			pageView.add(new JTextArea("555~ I can't find "+ e.getActionCommand()));
-			System.out.println(e.getActionCommand() + " is parsed unsuccessfully.");
-		}
+			}
+			else if(mode == 1){
+				try {
+					jep.setPage(url);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
+			}
+				
+		
+
 		pageView.revalidate();
 	}
 

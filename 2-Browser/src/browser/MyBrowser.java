@@ -5,18 +5,21 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 
 
 public class MyBrowser extends JFrame{
 	private static final long serialVersionUID = -579949100353474747L;
 	private static BrowseListener browseListener;
-	JPanel pageView;
+	JEditorPane jep;
+	PageView pageView;
+	// mode 0:My parser  1:JEditorPane
+	int mode = 0;
 	
 	MyBrowser(){
 		super("MyBrowser");
-		pageView = new JPanel();
-		browseListener = new BrowseListener(pageView);
+		pageView = new PageView();
+		jep = new JEditorPane();
+		browseListener = new BrowseListener(mode, pageView, jep);
 		
 		InitializeFrame();
 		InitializeLayout();
@@ -61,21 +64,22 @@ public class MyBrowser extends JFrame{
 		
 		content.add(navigator, BorderLayout.NORTH);
 
-//		pageView.setLayout(new GridLayout(0,1));
-		GridBagLayout layout = new GridBagLayout();
-		pageView.setLayout(layout);
-//		pageView.setLayout(new GridBagLayout());
+
+		if (mode == 0){
+			GridBagLayout layout = new GridBagLayout();
+			pageView.setLayout(layout);
+			
+			JScrollPane jsp = new JScrollPane(pageView);
+	//		.getScrollableTracksViewportWidth()
+			content.add(jsp, BorderLayout.CENTER);			
+		}
+		else if(mode == 1){
+			jep.setContentType("text/html");
+			jep.setEditable(false);
+			content.add(new JScrollPane(jep), BorderLayout.CENTER);			
+		}
+
 		
-		
-//		for(int i=0;i<100;i++){
-//			JTextArea text = new JTextArea(content.getBounds().width + "" + i);
-//			text.setEditable(false);
-//			pageView.add(text);
-//		}
-		
-		JScrollPane jsp = new JScrollPane(pageView);
-//		.getScrollableTracksViewportWidth()
-		content.add(jsp, BorderLayout.CENTER);
 
 	}
 	public static void main(String[] argv){
@@ -83,7 +87,7 @@ public class MyBrowser extends JFrame{
 		System.out.println("Initialize finished.");
 		myBrowser.setVisible(true);
 		
-//		browseListener.actionPerformed(new ActionEvent(new JTextField(), 412348921, "http://www.cad.zju.edu.cn/home/vagblog/"));
-		browseListener.actionPerformed(new ActionEvent(new JTextField(), 412348921, "http://www.cnblogs.com/lionden/archive/2012/10/17/swing_textarea.html"));
+		browseListener.actionPerformed(new ActionEvent(new JTextField(), 412348921, "http://www.cad.zju.edu.cn/home/vagblog/"));
+//		browseListener.actionPerformed(new ActionEvent(new JTextField(), 412348921, "http://www.cnblogs.com/lionden/archive/2012/10/17/swing_textarea.html"));
 	}
 }
