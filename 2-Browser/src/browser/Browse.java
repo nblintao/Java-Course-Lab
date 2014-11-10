@@ -17,7 +17,9 @@ import javax.swing.JTextArea;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
+import org.htmlparser.nodes.TextNode;
 import org.htmlparser.tags.ImageTag;
+import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.ParagraphTag;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.util.NodeList;
@@ -53,10 +55,15 @@ public class Browse {
 		SimpleNodeIterator iterator = nodeList.elements();
 		while(iterator.hasMoreNodes()){
 			Node node = iterator.nextNode();
-
-			if(node instanceof ParagraphTag){
+			if(node instanceof TextNode){
+				browseText((TextNode)node, panel);
+			}
+			else if(node instanceof LinkTag){
+				browseLink((LinkTag)node, panel);
+			}
+			else if(node instanceof ParagraphTag){
 				browseParagraph((ParagraphTag)node, panel);
-			}			
+			}
 			else if(node instanceof ImageTag){
 				try {
 					browseImage((ImageTag)node, panel);
@@ -74,20 +81,40 @@ public class Browse {
 			}
 		}
 	}
-	public void browseParagraph(ParagraphTag paragraph, JPanel panel){
-//		System.out.println(paragraph.toString());
-//		JLabel text = new JLabel(paragraph.getStringText());
-		JTextArea text = new JTextArea(paragraph.getStringText());
+	private void browseLink(LinkTag node, JPanel panel) {
+		JTextArea text = new JTextArea(node.getLinkText());
+		text.setFont(new Font("微软雅黑", Font.ITALIC, 16));
+		text.setEditable(false);
+		text.setLineWrap(true);
+		panel.add(text);
+		setGridBagConstraints(text, panel);
+		panel.revalidate();				
+	}
+
+	public void browseText(TextNode textNode, JPanel panel){
+		JTextArea text = new JTextArea(textNode.getText());
 		text.setFont(new Font("微软雅黑", Font.PLAIN, 16));
 		text.setEditable(false);
 		text.setLineWrap(true);
 		panel.add(text);
 		setGridBagConstraints(text, panel);
-		
 		panel.revalidate();
-		NodeList nodeList = paragraph.getChildren();
-		browseTrivial(nodeList, panel);
+	}
+	public void browseParagraph(ParagraphTag paragraph, JPanel panel){
+
+//		NodeList nodeList = paragraph.getChildren();
+//		if(null == nodeList)
+//			return;
+//		SimpleNodeIterator iterator = nodeList.elements();
+//		while(iterator.hasMoreNodes()){
+//			Node node = iterator.nextNode();
+//			if(node instanceof TextNode){
+//				browseText((TextNode)node, panel);
+//			}
+//		}
 		
+		NodeList nodeList = paragraph.getChildren();
+		browseTrivial(nodeList, panel);		
 	}
 	public void browseImage(ImageTag image, JPanel panel) throws Exception{
 		
