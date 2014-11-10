@@ -18,11 +18,12 @@ public class BrowseListener implements ActionListener {
 		this.pageView = pageView;		
 		this.jep = jep;
 		this.mode = mode;
-		browse = new Browse();
+		browse = new Browse(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+//		System.out.println(e);
 		String url = e.getActionCommand();
 		pageView.removeAll();
 			if(mode == 0){

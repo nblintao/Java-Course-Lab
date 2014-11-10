@@ -21,6 +21,7 @@ import org.htmlparser.nodes.TextNode;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.ParagraphTag;
+import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
@@ -28,7 +29,12 @@ import org.htmlparser.util.SimpleNodeIterator;
 
 public class Browse {
 	private static int imageCacheCounter = 0;
+	static BrowseListener browseListener;
 	static GridBagConstraints s = new GridBagConstraints();
+	
+	public Browse(BrowseListener browseListener){
+		Browse.browseListener = browseListener;
+	}
 	public void browseInitial(String url, JPanel pageView){
 		Parser parser = null;
 		try {
@@ -72,6 +78,9 @@ public class Browse {
 					e.printStackTrace();
 				}
 			}
+			else if(node instanceof ScriptTag){
+				// TODO Ignore script now
+			}
 //			else if(node instanceof TableTag){
 //				browseTable((TableTag)node, panel);
 //			}
@@ -82,16 +91,23 @@ public class Browse {
 		}
 	}
 	private void browseLink(LinkTag node, JPanel panel) {
-		JTextArea text = new JTextArea(node.getLinkText());
+		HyperLink text = new HyperLink(node.getLinkText(),node.getLink());
 		text.setFont(new Font("微软雅黑", Font.ITALIC, 16));
 		text.setEditable(false);
 		text.setLineWrap(true);
+		text.addMouseListener(new LinkListener(text, browseListener));
 		panel.add(text);
 		setGridBagConstraints(text, panel);
 		panel.revalidate();				
 	}
 
 	public void browseText(TextNode textNode, JPanel panel){
+		if(textNode.getText().trim().length()==0)
+			return;
+//		else 
+//			System.out.println(textNode.getText());
+//		System.out.println(textNode.getText().trim().length());
+		
 		JTextArea text = new JTextArea(textNode.getText());
 		text.setFont(new Font("微软雅黑", Font.PLAIN, 16));
 		text.setEditable(false);
