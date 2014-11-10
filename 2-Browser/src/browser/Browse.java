@@ -80,9 +80,8 @@ public class Browse {
 		JTextArea text = new JTextArea(paragraph.getStringText());
 		text.setFont(new Font("微软雅黑", Font.PLAIN, 16));
 		text.setEditable(false);
-//		text.setLineWrap(true);
+		text.setLineWrap(true);
 		panel.add(text);
-		
 		setGridBagConstraints(text, panel);
 		
 		panel.revalidate();
@@ -126,8 +125,8 @@ public class Browse {
 	public void setGridBagConstraints(Component in, JPanel out){
         s.fill = GridBagConstraints.HORIZONTAL;
         s.gridwidth = 0;
-        s.weightx = 0;
-        s.weighty = 0;
+        s.weightx = 1;
+//        s.weighty = 0;
         ((GridBagLayout)out.getLayout()).setConstraints(in, s);
 	}
 }
