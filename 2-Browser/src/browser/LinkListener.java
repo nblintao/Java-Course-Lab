@@ -1,7 +1,6 @@
 package browser;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -9,17 +8,19 @@ import javax.swing.JTextArea;
 
 public class LinkListener implements MouseListener{
 	public JTextArea text;
-	static BrowseListener browseListener;
-	LinkListener(JTextArea text, BrowseListener browseListener){
+	Browse browse;
+	LinkListener(JTextArea text, Browse browse){
 		this.text = text;
-		LinkListener.browseListener = browseListener;
+		this.browse = browse;
 	}
 	@Override
 	public void mouseClicked(MouseEvent event) {
 		HyperLink hyperLink = (HyperLink) event.getSource();
 		
 		String url = hyperLink.getLink();
-		browseListener.actionPerformed(new ActionEvent(new Object(), 328952, url));
+		browse.browseNew(url);
+//		browseListener.actionPerformed(new ActionEvent(new Object(), 328952, url));
+		
 	}
 
 	@Override

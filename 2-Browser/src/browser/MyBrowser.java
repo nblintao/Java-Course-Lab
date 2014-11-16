@@ -89,7 +89,8 @@ public class MyBrowser extends JFrame{
 		System.out.println("Initialize finished.");
 		myBrowser.setVisible(true);
 		
-		browseListener.actionPerformed(new ActionEvent(new JTextField(), 412348921, "http://www.cad.zju.edu.cn/home/vagblog/"));
+		myBrowser.browse.browseNew("http://www.cad.zju.edu.cn/home/vagblog/");
+//		browseListener.actionPerformed(new ActionEvent(new JTextField(), 412348921, "http://www.cad.zju.edu.cn/home/vagblog/"));
 //		browseListener.actionPerformed(new ActionEvent(new JTextField(), 412348921, "http://www.cnblogs.com/lionden/archive/2012/10/17/swing_textarea.html"));
 	}
 }

@@ -31,9 +31,9 @@ public class Browse {
 	private static int imageCacheCounter = 0;
 	static BrowseListener browseListener;
 	static GridBagConstraints s = new GridBagConstraints();
-	JPanel pageView;
+	PageView pageView;
 	
-	public Browse(BrowseListener browseListener, JPanel pageView){
+	public Browse(BrowseListener browseListener, PageView pageView){
 		Browse.browseListener = browseListener;
 		this.pageView = pageView;
 	}
@@ -101,19 +101,20 @@ public class Browse {
 		}
 	}
 	private void browseLink(LinkTag node, JPanel panel) {
+
+		HyperLink text = new HyperLink(node.getLinkText(),node.getLink());
+		text.setFont(new Font("微软雅黑", Font.ITALIC, 16));
+		text.setEditable(false);
+		text.setLineWrap(true);
+		text.addMouseListener(new LinkListener(text, this));
+		panel.add(text);
+		setGridBagConstraints(text, panel);
+		panel.revalidate();	
+		
 		NodeList childnodeList = node.getChildren();
-		if(childnodeList == null){
-			HyperLink text = new HyperLink(node.getLinkText(),node.getLink());
-			text.setFont(new Font("微软雅黑", Font.ITALIC, 16));
-			text.setEditable(false);
-			text.setLineWrap(true);
-			text.addMouseListener(new LinkListener(text, browseListener));
-			panel.add(text);
-			setGridBagConstraints(text, panel);
-			panel.revalidate();	
-		}else{
-			browseTrivial(childnodeList, panel);	
-			/*
+		if(childnodeList != null){
+//			browseTrivial(childnodeList, panel);	
+			
 			SimpleNodeIterator iterator = childnodeList.elements();
 			while(iterator.hasMoreNodes()){
 				Node subNode = iterator.nextNode();
@@ -125,7 +126,7 @@ public class Browse {
 					}
 				}
 			}
-			*/
+			
 		}
 	}
 
