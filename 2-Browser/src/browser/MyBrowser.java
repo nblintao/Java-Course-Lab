@@ -12,6 +12,7 @@ public class MyBrowser extends JFrame{
 	private static BrowseListener browseListener;
 	JEditorPane jep;
 	PageView pageView;
+	Browse browse;
 	// mode 0:My parser  1:JEditorPane
 	int mode = 0;
 	
@@ -19,7 +20,8 @@ public class MyBrowser extends JFrame{
 		super("MyBrowser");
 		pageView = new PageView();
 		jep = new JEditorPane();
-		browseListener = new BrowseListener(mode, pageView, jep);
+		browse = new Browse(browseListener, pageView);
+		browseListener = new BrowseListener(mode, pageView, jep, browse);
 		
 		InitializeFrame();
 		InitializeLayout();

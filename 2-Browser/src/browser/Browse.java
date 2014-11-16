@@ -31,18 +31,28 @@ public class Browse {
 	private static int imageCacheCounter = 0;
 	static BrowseListener browseListener;
 	static GridBagConstraints s = new GridBagConstraints();
+	JPanel pageView;
 	
-	public Browse(BrowseListener browseListener){
+	public Browse(BrowseListener browseListener, JPanel pageView){
 		Browse.browseListener = browseListener;
+		this.pageView = pageView;
 	}
-	public void browseInitial(String url, JPanel pageView){
-		Parser parser = null;
+	
+	public void browseNew(String url){
+		pageView.removeAll();
 		try {
-			parser = new Parser(url);
-		} catch (ParserException e1) {
-			e1.printStackTrace();
+			browseInitial(url, pageView);
+			System.out.println(url + " is parsed successfully.");
+		} catch (Exception e) {
+			pageView.add(new JTextArea("555~ I can't find "+ url));
+			e.printStackTrace();
 		}
-		
+		pageView.revalidate();
+	}
+	
+	public void browseInitial(String url, JPanel pageView) throws Exception{
+		Parser parser = null;
+		parser = new Parser(url);
 		NodeList nodeList = null;
 		try {
 			nodeList = parser.parse(null);
@@ -91,14 +101,32 @@ public class Browse {
 		}
 	}
 	private void browseLink(LinkTag node, JPanel panel) {
-		HyperLink text = new HyperLink(node.getLinkText(),node.getLink());
-		text.setFont(new Font("微软雅黑", Font.ITALIC, 16));
-		text.setEditable(false);
-		text.setLineWrap(true);
-		text.addMouseListener(new LinkListener(text, browseListener));
-		panel.add(text);
-		setGridBagConstraints(text, panel);
-		panel.revalidate();				
+		NodeList childnodeList = node.getChildren();
+		if(childnodeList == null){
+			HyperLink text = new HyperLink(node.getLinkText(),node.getLink());
+			text.setFont(new Font("微软雅黑", Font.ITALIC, 16));
+			text.setEditable(false);
+			text.setLineWrap(true);
+			text.addMouseListener(new LinkListener(text, browseListener));
+			panel.add(text);
+			setGridBagConstraints(text, panel);
+			panel.revalidate();	
+		}else{
+			browseTrivial(childnodeList, panel);	
+			/*
+			SimpleNodeIterator iterator = childnodeList.elements();
+			while(iterator.hasMoreNodes()){
+				Node subNode = iterator.nextNode();
+				if(subNode instanceof ImageTag){
+					try {
+						browseImage((ImageTag)subNode, panel);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			*/
+		}
 	}
 
 	public void browseText(TextNode textNode, JPanel panel){
@@ -115,6 +143,7 @@ public class Browse {
 		panel.add(text);
 		setGridBagConstraints(text, panel);
 		panel.revalidate();
+		
 	}
 	public void browseParagraph(ParagraphTag paragraph, JPanel panel){
 
@@ -137,29 +166,32 @@ public class Browse {
 		
 		String urlText = image.getImageURL();
 		System.out.println(urlText);
-		
-		//TODO need advanced hash algorithm
-//		String hashedName = urlText.substring(urlText.lastIndexOf('/')+1);
-		imageCacheCounter++;
-		String hashedName = String.valueOf(imageCacheCounter);
-		
-		URL url = new URL(urlText);
-		InputStream is = url.openStream();
-		File imageFile = new File("./ImageCache/" + hashedName);
-
-		OutputStream os = new FileOutputStream(imageFile);
-        int bytesRead = 0;
-        byte[] buffer = new byte[8192];
-        while((bytesRead = is.read(buffer,0,8192))!=-1)
-        	os.write(buffer,0,bytesRead);
-        os.close();
-        JLabel imageLabel = new JLabel();        
-        imageLabel.setIcon(new ImageIcon(imageFile.getAbsolutePath()));
-        panel.add(imageLabel);
-        
-        setGridBagConstraints(imageLabel, panel);
-        
-        panel.revalidate();
+		if(urlText.substring(urlText.lastIndexOf('.')).equals(".bmp")){
+			System.out.println("I don't know bmp image!");
+		}else{
+			//TODO need advanced hash algorithm
+			// String hashedName = urlText.substring(urlText.lastIndexOf('/')+1);
+			imageCacheCounter++;
+			String hashedName = String.valueOf(imageCacheCounter)+urlText.substring(urlText.lastIndexOf('.'));
+			
+			URL url = new URL(urlText);
+			InputStream is = url.openStream();
+			File imageFile = new File("./ImageCache/" + hashedName);
+			
+			OutputStream os = new FileOutputStream(imageFile);
+			int bytesRead = 0;
+			byte[] buffer = new byte[8192];
+			while((bytesRead = is.read(buffer,0,8192))!=-1)
+				os.write(buffer,0,bytesRead);
+			os.close();
+			JLabel imageLabel = new JLabel();
+			imageLabel.setIcon(new ImageIcon(imageFile.getAbsolutePath()));
+			panel.add(imageLabel);
+			
+			setGridBagConstraints(imageLabel, panel);
+			
+			panel.revalidate();
+		}
 	    
 	}
 	public void browseTable(TableTag table, JPanel panel){
