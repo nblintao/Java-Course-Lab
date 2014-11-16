@@ -2,6 +2,7 @@ package browser;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.*;
@@ -11,8 +12,10 @@ public class MyBrowser extends JFrame{
 	private static final long serialVersionUID = -579949100353474747L;
 	private static BrowseListener browseListener;
 	JEditorPane jep;
+	JScrollPane jsp;
 	PageView pageView;
 	Browse browse;
+	History history;
 	// mode 0:My parser  1:JEditorPane
 	int mode = 0;
 	
@@ -20,8 +23,11 @@ public class MyBrowser extends JFrame{
 		super("MyBrowser");
 		pageView = new PageView();
 		jep = new JEditorPane();
-		browse = new Browse(browseListener, pageView);
-		browseListener = new BrowseListener(mode, pageView, jep, browse);
+		jsp = new JScrollPane(pageView);
+		history = new History();
+		browse = new Browse(browseListener, pageView, jsp, history);
+		browseListener = new BrowseListener(mode, pageView, jep, browse, history);
+		history.setBrowse(browse);
 		
 		InitializeFrame();
 		InitializeLayout();
@@ -48,9 +54,19 @@ public class MyBrowser extends JFrame{
 		Box navigator = Box.createHorizontalBox();
 		
 		JButton buttonBackward = new JButton("Backward");
+		buttonBackward.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				history.backward();
+			}
+		});
 		navigator.add(buttonBackward);
 
 		JButton buttonForward = new JButton("Forward");
+		buttonForward.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				history.forward();
+			}
+		});
 		navigator.add(buttonForward);
 		
 		JButton buttonRefresh = new JButton("Refresh");
@@ -68,10 +84,7 @@ public class MyBrowser extends JFrame{
 
 
 		if (mode == 0){
-			GridBagLayout layout = new GridBagLayout();
-			pageView.setLayout(layout);
-			
-			JScrollPane jsp = new JScrollPane(pageView);
+			pageView.setLayout(new GridBagLayout());
 	//		.getScrollableTracksViewportWidth()
 			content.add(jsp, BorderLayout.CENTER);			
 		}
@@ -89,7 +102,7 @@ public class MyBrowser extends JFrame{
 		System.out.println("Initialize finished.");
 		myBrowser.setVisible(true);
 		
-		myBrowser.browse.browseNew("http://www.cad.zju.edu.cn/home/vagblog/");
+		myBrowser.history.newPage("http://www.cad.zju.edu.cn/home/vagblog/");
 //		browseListener.actionPerformed(new ActionEvent(new JTextField(), 412348921, "http://www.cad.zju.edu.cn/home/vagblog/"));
 //		browseListener.actionPerformed(new ActionEvent(new JTextField(), 412348921, "http://www.cnblogs.com/lionden/archive/2012/10/17/swing_textarea.html"));
 	}

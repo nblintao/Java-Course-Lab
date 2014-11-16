@@ -6,9 +6,11 @@ public class History {
 	Vector<String> historyVector;
 	int currentPage;
 	Browse browse;
-	History(Browse browse){
+	History(){
 		historyVector = new Vector<String>();
-		currentPage = -1;
+		currentPage = -1;		
+	}
+	public void setBrowse(Browse browse){
 		this.browse = browse;
 	}
 	public void backward(){
@@ -20,9 +22,19 @@ public class History {
 		}
 	}
 	public void forward(){
-		
+		if(currentPage + 1 >= historyVector.size()){
+			System.out.println("Can't go forward!");
+		}else{
+			currentPage++;
+			browse.browseNew(historyVector.get(currentPage));
+		}
 	}
 	public void newPage(String url){
-		
+		for(int i=currentPage+1;i<historyVector.size();i++){
+			historyVector.remove(i);
+		}
+		historyVector.add(url);
+		currentPage++;
+		browse.browseNew(historyVector.get(currentPage));
 	}
 }

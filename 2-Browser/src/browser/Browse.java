@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.ScrollPane;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -13,6 +14,7 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.htmlparser.Node;
@@ -32,14 +34,21 @@ public class Browse {
 	static BrowseListener browseListener;
 	static GridBagConstraints s = new GridBagConstraints();
 	PageView pageView;
+	JScrollPane jsp;
+	History history;
 	
-	public Browse(BrowseListener browseListener, PageView pageView){
+	public Browse(BrowseListener browseListener, PageView pageView, JScrollPane jsp, History history){
 		Browse.browseListener = browseListener;
 		this.pageView = pageView;
+		this.jsp = jsp;
+		this.history = history;
 	}
 	
 	public void browseNew(String url){
 		pageView.removeAll();
+//		System.out.println(jsp.getVerticalScrollBar().getValue());
+//		jsp.getVerticalScrollBar().setValue(200);
+//		jsp.getVerticalScrollBar().setValue(jsp.getVerticalScrollBar().getMinimum());
 		try {
 			browseInitial(url, pageView);
 			System.out.println(url + " is parsed successfully.");
@@ -106,7 +115,7 @@ public class Browse {
 		text.setFont(new Font("微软雅黑", Font.ITALIC, 16));
 		text.setEditable(false);
 		text.setLineWrap(true);
-		text.addMouseListener(new LinkListener(text, this));
+		text.addMouseListener(new LinkListener(text, history));
 		panel.add(text);
 		setGridBagConstraints(text, panel);
 		panel.revalidate();	

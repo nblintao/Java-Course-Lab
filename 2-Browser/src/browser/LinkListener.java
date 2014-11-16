@@ -8,17 +8,18 @@ import javax.swing.JTextArea;
 
 public class LinkListener implements MouseListener{
 	public JTextArea text;
-	Browse browse;
-	LinkListener(JTextArea text, Browse browse){
+	History history;
+	LinkListener(JTextArea text, History history){
 		this.text = text;
-		this.browse = browse;
+		this.history = history;
 	}
 	@Override
 	public void mouseClicked(MouseEvent event) {
 		HyperLink hyperLink = (HyperLink) event.getSource();
 		
 		String url = hyperLink.getLink();
-		browse.browseNew(url);
+		history.newPage(url);
+//		browse.browseNew(url);
 //		browseListener.actionPerformed(new ActionEvent(new Object(), 328952, url));
 		
 	}

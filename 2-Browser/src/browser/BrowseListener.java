@@ -13,13 +13,15 @@ public class BrowseListener implements ActionListener {
 	private JEditorPane jep;
 	private int mode;
 	public Browse browse;
+	History history;
 	
-	public BrowseListener(int mode,JPanel pageView, JEditorPane jep, Browse browse){
+	public BrowseListener(int mode,JPanel pageView, JEditorPane jep, Browse browse, History history){
 		this.pageView = pageView;		
 		this.jep = jep;
 		this.mode = mode;
 //		browse = new Browse(this);
 		this.browse = browse;
+		this.history = history;
 	}
 
 
@@ -27,7 +29,7 @@ public class BrowseListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 //		System.out.println(e);
 		String url = e.getActionCommand();
-		browse.browseNew(url);
+		history.newPage(url);
 /*			
   			pageView.removeAll();
   			if(mode == 0){
