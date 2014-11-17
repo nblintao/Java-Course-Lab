@@ -37,13 +37,15 @@ public class Browse {
 	History history;
 	Status status;
 	Address address;
+	private Favorite favorite;
 	
-	public Browse(PageView pageView, JScrollPane jsp, History history, Status status, Address address){
+	public Browse(PageView pageView, JScrollPane jsp, History history, Status status, Address address, Favorite favorite){
 		this.pageView = pageView;
 		this.jsp = jsp;
 		this.history = history;
 		this.status = status;
 		this.address = address;
+		this.favorite = favorite;
 	}
 	
 	public void browseNew(String url){
@@ -54,8 +56,10 @@ public class Browse {
 //		jsp.getVerticalScrollBar().setValue(200);
 //		jsp.getVerticalScrollBar().setValue(jsp.getVerticalScrollBar().getMinimum());
 		try {
+			favorite.loading();
 			browseInitial(url, pageView);
 //			System.out.println(url + " is parsed successfully.");
+			favorite.newPage(url);
 			status.newInfo(url + " is parsed successfully.");
 		} catch (Exception e) {
 //			pageView.add(new JTextArea("555~ I can't find "+ url));

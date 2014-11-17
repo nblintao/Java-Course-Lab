@@ -27,6 +27,7 @@ public class MyBrowser extends JFrame{
 	History history;
 	Status status;
 	Address address;
+	Favorite favorite;
 	// mode 0:My parser  1:JEditorPane
 	int mode = 0;
 	
@@ -37,8 +38,9 @@ public class MyBrowser extends JFrame{
 		jep = new JEditorPane();
 		jsp = new JScrollPane(pageView);
 		history = new History(status);
+		favorite = new Favorite();
 		address = new Address(history);
-		browse = new Browse(pageView, jsp, history, status, address);
+		browse = new Browse(pageView, jsp, history, status, address, favorite);
 		history.setBrowse(browse);
 		
 		InitializeFrame();
@@ -92,12 +94,9 @@ public class MyBrowser extends JFrame{
 		});
 		navigator.add(buttonForward);
 		
-
-
-//		JTextField urlField = new JTextField();
-//		urlField.addActionListener(browseListener);
-		
 		navigator.add(address.urlField);
+		
+		navigator.add(favorite.buttonFavorite);
 
 		Container content = getContentPane();
 		content.setLayout(new BorderLayout());
