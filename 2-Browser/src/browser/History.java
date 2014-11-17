@@ -42,4 +42,7 @@ public class History {
 		currentPage++;
 		browse.browseNew(historyVector.get(currentPage));
 	}
+	public void refresh() {
+		browse.browseNew(historyVector.get(currentPage));
+	}
 }

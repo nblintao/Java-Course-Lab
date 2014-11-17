@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
@@ -64,7 +65,8 @@ public class MyBrowser extends JFrame{
 	public void InitializeLayout(){
 		Box navigator = Box.createHorizontalBox();
 		
-		JButton buttonBackward = new JButton("Backward");
+		JButton buttonBackward = new JButton();
+		buttonBackward.setIcon(new ImageIcon("./Icon/backward.png"));
 		buttonBackward.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				history.backward();
@@ -72,7 +74,17 @@ public class MyBrowser extends JFrame{
 		});
 		navigator.add(buttonBackward);
 
-		JButton buttonForward = new JButton("Forward");
+		JButton buttonRefresh = new JButton("");
+		buttonRefresh.setIcon(new ImageIcon("./Icon/refresh.png"));
+		buttonRefresh.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				history.refresh();
+			}			
+		});		
+		navigator.add(buttonRefresh);
+		
+		JButton buttonForward = new JButton();
+		buttonForward.setIcon(new ImageIcon("./Icon/forward.png"));
 		buttonForward.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				history.forward();
@@ -80,8 +92,7 @@ public class MyBrowser extends JFrame{
 		});
 		navigator.add(buttonForward);
 		
-		JButton buttonRefresh = new JButton("Refresh");
-		navigator.add(buttonRefresh);
+
 
 //		JTextField urlField = new JTextField();
 //		urlField.addActionListener(browseListener);
@@ -97,7 +108,6 @@ public class MyBrowser extends JFrame{
 		if (mode == 0){
 			pageView.setLayout(new GridBagLayout());
 	//		.getScrollableTracksViewportWidth()
-			jsp.setWheelScrollingEnabled(true);
 			content.add(jsp, BorderLayout.CENTER);			
 		}
 		else if(mode == 1){

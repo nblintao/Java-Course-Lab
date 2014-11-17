@@ -49,6 +49,7 @@ public class Browse {
 	public void browseNew(String url){
 		address.setAddress(url);
 		pageView.removeAll();
+//		jsp.removeAll();
 //		System.out.println(jsp.getVerticalScrollBar().getValue());
 //		jsp.getVerticalScrollBar().setValue(200);
 //		jsp.getVerticalScrollBar().setValue(jsp.getVerticalScrollBar().getMinimum());
@@ -194,18 +195,22 @@ public class Browse {
 			// String hashedName = urlText.substring(urlText.lastIndexOf('/')+1);
 //			imageCacheCounter++;
 //			String hashedName = String.valueOf(imageCacheCounter)+urlText.substring(urlText.lastIndexOf('.'));
-			String hashedName = MyHash(urlText) + urlText.substring(urlText.lastIndexOf('.'));
-			
+			String fileName = MyHash(urlText) + urlText.substring(urlText.lastIndexOf('.'));
+				
 			URL url = new URL(urlText);
 			InputStream is = url.openStream();
-			File imageFile = new File("./ImageCache/" + hashedName);
+			File imageFile = new File("./ImageCache/" + fileName);
+			if(imageFile.exists()){
+				status.newInfo(fileName + " exists.");
+			}else{
+				OutputStream os = new FileOutputStream(imageFile);
+				int bytesRead = 0;
+				byte[] buffer = new byte[8192];
+				while((bytesRead = is.read(buffer,0,8192))!=-1)
+					os.write(buffer,0,bytesRead);
+				os.close();				
+			}
 			
-			OutputStream os = new FileOutputStream(imageFile);
-			int bytesRead = 0;
-			byte[] buffer = new byte[8192];
-			while((bytesRead = is.read(buffer,0,8192))!=-1)
-				os.write(buffer,0,bytesRead);
-			os.close();
 			JLabel imageLabel = new JLabel();
 			imageLabel.setIcon(new ImageIcon(imageFile.getAbsolutePath()));
 			panel.add(imageLabel);
@@ -222,9 +227,10 @@ public class Browse {
 		int num = 0;
 		char[] str = urlText.toCharArray();
 		for(int i=0;i<str.length;i++){			
-			num <<= 7;
+//			num <<= 7;
 			num += str[i];
 		}
+//		System.out.println(urlText + "         " +String.valueOf(num));
 		return String.valueOf(num);
 	}
 

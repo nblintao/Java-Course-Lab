@@ -13,7 +13,7 @@ public class Address implements ActionListener{
 	Address(History history){
 		this.history = history;
 		this.urlField = new JTextField();
-		urlField.setFont(new Font("微软雅黑", Font.BOLD, 12));
+		urlField.setFont(new Font("微软雅黑", Font.BOLD, 16));
 		urlField.addActionListener(this);
 	}
 	
