@@ -2,25 +2,21 @@ package browser;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-
-import javax.swing.JEditorPane;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
 
 public class BrowseListener implements ActionListener {
-	private JPanel pageView;
-	private JEditorPane jep;
-	private int mode;
-	public Browse browse;
+//	private JPanel pageView;
+//	private JEditorPane jep;
+//	private int mode;
+//	public Browse browse;
 	History history;
 	
-	public BrowseListener(int mode,JPanel pageView, JEditorPane jep, Browse browse, History history){
-		this.pageView = pageView;		
-		this.jep = jep;
-		this.mode = mode;
+//	public BrowseListener(int mode,JPanel pageView, JEditorPane jep, Browse browse, History history){
+	public BrowseListener(History history){
+//		this.pageView = pageView;		
+//		this.jep = jep;
+//		this.mode = mode;
 //		browse = new Browse(this);
-		this.browse = browse;
+//		this.browse = browse;
 		this.history = history;
 	}
 

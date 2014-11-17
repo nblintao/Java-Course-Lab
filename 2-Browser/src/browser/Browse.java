@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.ScrollPane;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -36,12 +35,14 @@ public class Browse {
 	PageView pageView;
 	JScrollPane jsp;
 	History history;
+	Status status;
 	
-	public Browse(BrowseListener browseListener, PageView pageView, JScrollPane jsp, History history){
+	public Browse(BrowseListener browseListener, PageView pageView, JScrollPane jsp, History history, Status status){
 		Browse.browseListener = browseListener;
 		this.pageView = pageView;
 		this.jsp = jsp;
 		this.history = history;
+		this.status = status;
 	}
 	
 	public void browseNew(String url){
@@ -51,7 +52,8 @@ public class Browse {
 //		jsp.getVerticalScrollBar().setValue(jsp.getVerticalScrollBar().getMinimum());
 		try {
 			browseInitial(url, pageView);
-			System.out.println(url + " is parsed successfully.");
+//			System.out.println(url + " is parsed successfully.");
+			status.newInfo(url + " is parsed successfully.");
 		} catch (Exception e) {
 			pageView.add(new JTextArea("555~ I can't find "+ url));
 			e.printStackTrace();
@@ -115,7 +117,7 @@ public class Browse {
 		text.setFont(new Font("微软雅黑", Font.ITALIC, 16));
 		text.setEditable(false);
 		text.setLineWrap(true);
-		text.addMouseListener(new LinkListener(text, history));
+		text.addMouseListener(new LinkListener(text, history, status));
 		panel.add(text);
 		setGridBagConstraints(text, panel);
 		panel.revalidate();	
@@ -175,9 +177,11 @@ public class Browse {
 		
 		
 		String urlText = image.getImageURL();
-		System.out.println(urlText);
+//		System.out.println(urlText);
+		status.newInfo(urlText);
 		if(urlText.substring(urlText.lastIndexOf('.')).equals(".bmp")){
-			System.out.println("I don't know bmp image!");
+//			System.out.println("I don't know bmp image!");
+			status.newInfo("I don't know bmp image!");
 		}else{
 			//TODO need advanced hash algorithm
 			// String hashedName = urlText.substring(urlText.lastIndexOf('/')+1);

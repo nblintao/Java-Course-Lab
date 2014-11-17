@@ -16,17 +16,20 @@ public class MyBrowser extends JFrame{
 	PageView pageView;
 	Browse browse;
 	History history;
+	Status status;
 	// mode 0:My parser  1:JEditorPane
 	int mode = 0;
 	
 	MyBrowser(){
 		super("MyBrowser");
+		status = new Status();
 		pageView = new PageView();
 		jep = new JEditorPane();
 		jsp = new JScrollPane(pageView);
-		history = new History();
-		browse = new Browse(browseListener, pageView, jsp, history);
-		browseListener = new BrowseListener(mode, pageView, jep, browse, history);
+		history = new History(status);
+		browse = new Browse(browseListener, pageView, jsp, history, status);
+//		browseListener = new BrowseListener(mode, pageView, jep, browse, history);
+		browseListener = new BrowseListener(history);
 		history.setBrowse(browse);
 		
 		InitializeFrame();
@@ -94,12 +97,14 @@ public class MyBrowser extends JFrame{
 			content.add(new JScrollPane(jep), BorderLayout.CENTER);			
 		}
 
+		content.add(status.statusField, BorderLayout.SOUTH);
 		
 
 	}
 	public static void main(String[] argv){
 		MyBrowser myBrowser = new MyBrowser();
-		System.out.println("Initialize finished.");
+//		System.out.println("Initialize finished.");
+		myBrowser.status.newInfo("Initialize finished.");
 		myBrowser.setVisible(true);
 		
 		myBrowser.history.newPage("http://www.cad.zju.edu.cn/home/vagblog/");
