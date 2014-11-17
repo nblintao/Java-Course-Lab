@@ -30,22 +30,23 @@ import org.htmlparser.util.SimpleNodeIterator;
 
 public class Browse {
 	private static int imageCacheCounter = 0;
-	static BrowseListener browseListener;
 	static GridBagConstraints s = new GridBagConstraints();
 	PageView pageView;
 	JScrollPane jsp;
 	History history;
 	Status status;
+	Address address;
 	
-	public Browse(BrowseListener browseListener, PageView pageView, JScrollPane jsp, History history, Status status){
-		Browse.browseListener = browseListener;
+	public Browse(PageView pageView, JScrollPane jsp, History history, Status status, Address address){
 		this.pageView = pageView;
 		this.jsp = jsp;
 		this.history = history;
 		this.status = status;
+		this.address = address;
 	}
 	
 	public void browseNew(String url){
+		address.setAddress(url);
 		pageView.removeAll();
 //		System.out.println(jsp.getVerticalScrollBar().getValue());
 //		jsp.getVerticalScrollBar().setValue(200);
@@ -55,8 +56,10 @@ public class Browse {
 //			System.out.println(url + " is parsed successfully.");
 			status.newInfo(url + " is parsed successfully.");
 		} catch (Exception e) {
-			pageView.add(new JTextArea("555~ I can't find "+ url));
+//			pageView.add(new JTextArea("555~ I can't find "+ url));
+			status.newInfo("555~ I can't find "+ url);
 			e.printStackTrace();
+			history.newPage("http://www.baidu.com/s?ie=UTF-8&wd="+url);
 		}
 		pageView.revalidate();
 	}
@@ -95,8 +98,8 @@ public class Browse {
 				try {
 					browseImage((ImageTag)node, panel);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+//					e.printStackTrace();
+					status.newInfo("Can't find image: " + ((ImageTag)node).getImageURL());
 				}
 			}
 			else if(node instanceof ScriptTag){

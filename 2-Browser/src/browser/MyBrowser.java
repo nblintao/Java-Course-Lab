@@ -10,13 +10,13 @@ import javax.swing.*;
 
 public class MyBrowser extends JFrame{
 	private static final long serialVersionUID = -579949100353474747L;
-	private static BrowseListener browseListener;
 	JEditorPane jep;
 	JScrollPane jsp;
 	PageView pageView;
 	Browse browse;
 	History history;
 	Status status;
+	Address address;
 	// mode 0:My parser  1:JEditorPane
 	int mode = 0;
 	
@@ -27,9 +27,8 @@ public class MyBrowser extends JFrame{
 		jep = new JEditorPane();
 		jsp = new JScrollPane(pageView);
 		history = new History(status);
-		browse = new Browse(browseListener, pageView, jsp, history, status);
-//		browseListener = new BrowseListener(mode, pageView, jep, browse, history);
-		browseListener = new BrowseListener(history);
+		address = new Address(history);
+		browse = new Browse(pageView, jsp, history, status, address);
 		history.setBrowse(browse);
 		
 		InitializeFrame();
@@ -75,10 +74,10 @@ public class MyBrowser extends JFrame{
 		JButton buttonRefresh = new JButton("Refresh");
 		navigator.add(buttonRefresh);
 
-		JTextField urlField = new JTextField();
-		urlField.addActionListener(browseListener);
+//		JTextField urlField = new JTextField();
+//		urlField.addActionListener(browseListener);
 		
-		navigator.add(urlField);
+		navigator.add(address.urlField);
 
 		Container content = getContentPane();
 		content.setLayout(new BorderLayout());
@@ -107,6 +106,7 @@ public class MyBrowser extends JFrame{
 		myBrowser.status.newInfo("Initialize finished.");
 		myBrowser.setVisible(true);
 		
+//		myBrowser.history.newPage("http://10.214.47.99:8080/masm/index.html");
 		myBrowser.history.newPage("http://www.cad.zju.edu.cn/home/vagblog/");
 //		browseListener.actionPerformed(new ActionEvent(new JTextField(), 412348921, "http://www.cad.zju.edu.cn/home/vagblog/"));
 //		browseListener.actionPerformed(new ActionEvent(new JTextField(), 412348921, "http://www.cnblogs.com/lionden/archive/2012/10/17/swing_textarea.html"));
