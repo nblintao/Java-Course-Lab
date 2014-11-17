@@ -23,13 +23,14 @@ import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.ParagraphTag;
 import org.htmlparser.tags.ScriptTag;
+import org.htmlparser.tags.StyleTag;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SimpleNodeIterator;
 
 public class Browse {
-	private static int imageCacheCounter = 0;
+//	private static int imageCacheCounter = 0;
 	static GridBagConstraints s = new GridBagConstraints();
 	PageView pageView;
 	JScrollPane jsp;
@@ -104,6 +105,9 @@ public class Browse {
 			}
 			else if(node instanceof ScriptTag){
 				// TODO Ignore script now
+			}
+			else if(node instanceof StyleTag){
+				// TODO Ignore style now
 			}
 //			else if(node instanceof TableTag){
 //				browseTable((TableTag)node, panel);
@@ -186,10 +190,11 @@ public class Browse {
 //			System.out.println("I don't know bmp image!");
 			status.newInfo("I don't know bmp image!");
 		}else{
-			//TODO need advanced hash algorithm
+			
 			// String hashedName = urlText.substring(urlText.lastIndexOf('/')+1);
-			imageCacheCounter++;
-			String hashedName = String.valueOf(imageCacheCounter)+urlText.substring(urlText.lastIndexOf('.'));
+//			imageCacheCounter++;
+//			String hashedName = String.valueOf(imageCacheCounter)+urlText.substring(urlText.lastIndexOf('.'));
+			String hashedName = MyHash(urlText) + urlText.substring(urlText.lastIndexOf('.'));
 			
 			URL url = new URL(urlText);
 			InputStream is = url.openStream();
@@ -211,6 +216,18 @@ public class Browse {
 		}
 	    
 	}
+	
+	//TODO need advanced hash algorithm
+	private String MyHash(String urlText) {
+		int num = 0;
+		char[] str = urlText.toCharArray();
+		for(int i=0;i<str.length;i++){			
+			num <<= 7;
+			num += str[i];
+		}
+		return String.valueOf(num);
+	}
+
 	public void browseTable(TableTag table, JPanel panel){
 		//TODO
 	}
