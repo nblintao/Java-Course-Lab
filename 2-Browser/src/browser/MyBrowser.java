@@ -130,9 +130,6 @@ public class MyBrowser extends JFrame{
 		myBrowser.status.newInfo("Initialize finished.");
 		myBrowser.setVisible(true);
 		
-//		myBrowser.history.newPage("http://10.214.47.99:8080/masm/index.html");
 		myBrowser.history.newPage("http://www.cad.zju.edu.cn/home/vagblog/");
-//		browseListener.actionPerformed(new ActionEvent(new JTextField(), 412348921, "http://www.cad.zju.edu.cn/home/vagblog/"));
-//		browseListener.actionPerformed(new ActionEvent(new JTextField(), 412348921, "http://www.cnblogs.com/lionden/archive/2012/10/17/swing_textarea.html"));
 	}
 }

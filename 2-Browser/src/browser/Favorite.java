@@ -42,6 +42,8 @@ public class Favorite implements ActionListener {
 		like("http://10.214.47.99:8080/masm/index.html");//非常天空
 		like("http://bksy.zju.edu.cn/");//本科生院
 		like("http://cspo.zju.edu.cn/");//计算机学院
+		like("http://ds.eywedu.com/jinyong/tlbb/");//天龙八部
+		like("http://www.cad.zju.edu.cn/home/vagblog/");//VAG小组
 	}
 
 	public void actionPerformed(ActionEvent e){

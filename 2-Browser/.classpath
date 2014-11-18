@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="Icon"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="D:/卓越工厂/Java应用技术/HTMLParser-2.0-SNAPSHOT/lib/filterbuilder.jar"/>
 	<classpathentry kind="lib" path="D:/卓越工厂/Java应用技术/HTMLParser-2.0-SNAPSHOT/lib/htmllexer.jar"/>
