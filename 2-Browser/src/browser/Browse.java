@@ -199,7 +199,13 @@ public class Browse {
 			// String hashedName = urlText.substring(urlText.lastIndexOf('/')+1);
 //			imageCacheCounter++;
 //			String hashedName = String.valueOf(imageCacheCounter)+urlText.substring(urlText.lastIndexOf('.'));
-			String fileName = MyHash(urlText) + urlText.substring(urlText.lastIndexOf('.'));
+			String suffix;
+			suffix = urlText.substring(urlText.lastIndexOf('.'));
+			if(!suffix.equals(".jpg")&&!suffix.equals(".png")&&!suffix.equals(".gif")){
+				suffix = "";
+			}
+			String fileName = MyHash(urlText) + suffix;
+			
 				
 			URL url = new URL(urlText);
 			InputStream is = url.openStream();

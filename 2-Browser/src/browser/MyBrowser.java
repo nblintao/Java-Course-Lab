@@ -10,11 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 
 
@@ -28,8 +28,9 @@ public class MyBrowser extends JFrame{
 	Status status;
 	Address address;
 	Favorite favorite;
-	// mode 0:My parser  1:JEditorPane
-	int mode = 0;
+	BrowseDriver browseDriver;
+	
+	int mode = 0;// mode 0:My parser  1:JEditorPane
 	
 	MyBrowser(){
 		super("MyBrowser");
@@ -38,7 +39,8 @@ public class MyBrowser extends JFrame{
 		jep = new JEditorPane();
 		jsp = new JScrollPane(pageView);
 		history = new History(status);
-		favorite = new Favorite();
+		browseDriver = new BrowseDriver(history);
+		favorite = new Favorite(browseDriver);
 		address = new Address(history);
 		browse = new Browse(pageView, jsp, history, status, address, favorite);
 		history.setBrowse(browse);
@@ -65,7 +67,8 @@ public class MyBrowser extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	public void InitializeLayout(){
-		Box navigator = Box.createHorizontalBox();
+//		Box navigator = Box.createHorizontalBox();
+		JMenuBar navigator = new JMenuBar();
 		
 		JButton buttonBackward = new JButton();
 		buttonBackward.setIcon(new ImageIcon("./Icon/backward.png"));
@@ -95,6 +98,8 @@ public class MyBrowser extends JFrame{
 		navigator.add(buttonForward);
 		
 		navigator.add(address.urlField);
+		
+		navigator.add(favorite.menuFolder);
 		
 		navigator.add(favorite.buttonFavorite);
 
