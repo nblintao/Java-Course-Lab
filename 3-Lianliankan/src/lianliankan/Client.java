@@ -11,25 +11,24 @@ import javax.swing.JFrame;
 
 public class Client{
 	JFrame frame;
+	DataCenter dc;
+	
 	Client(){
 		frame = new JFrame("Lianliankan");
+		dc = new DataCenter();
 		InitializeFrame();
 		InitializeLayout();
 		frame.setVisible(true);
 	}
 	private void InitializeLayout() {
 		Container content = frame.getContentPane();
+
 		
-		int width = 12;
-		int height = 6;	
+		content.setLayout(new GridLayout(dc.height, dc.width));
 		
-		content.setLayout(new GridLayout(height, width));
-		
-		
-		int typeAmount = 5;
-		for(int i=0;i<height;i++){
-			for(int j=0;j<width;j++){
-				content.add(new Block(typeAmount));
+		for(int i=0;i<dc.height;i++){
+			for(int j=0;j<dc.width;j++){
+				content.add(new Block(i, j, dc));
 			}
 		}
 		
