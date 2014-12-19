@@ -22,6 +22,7 @@ public class Block extends JButton implements ActionListener {
 		type = dc.getTpye();
 		setIcon(new ImageIcon("./Icon/" + dc.style + "/" + type + ".png"));
 		this.addActionListener(this);
+		this.setBorder(null);
 	}
 //	setEnabled(boolean b)  
 	@Override
@@ -47,10 +48,10 @@ public class Block extends JButton implements ActionListener {
 			return false;
 		dc.map[b1.i][b1.j]=false;
 		dc.map[b2.i][b2.j]=false;		
-		for(int ai=0;ai<=dc.height;ai++){
-			for(int aj=0;aj<=dc.width;aj++){
-				for(int bi=0;bi<=dc.height;bi++){
-					for(int bj=0;bj<=dc.width;bj++){
+		for(int ai=0;ai<dc.height;ai++){
+			for(int aj=0;aj<dc.width;aj++){
+				for(int bi=0;bi<dc.height;bi++){
+					for(int bj=0;bj<dc.width;bj++){
 						if(line(b1.i,b1.j,ai,aj)&&line(ai,aj,bi,bj)&&line(bi,bj,b2.i,b2.j)){
 							dc.map[b1.i][b1.j]=true;
 							dc.map[b2.i][b2.j]=true;
@@ -67,6 +68,7 @@ public class Block extends JButton implements ActionListener {
 	private boolean line(int ai, int aj, int bi, int bj) {
 		if(ai==bi){
 			for(int t=Math.min(aj, bj);t<=Math.max(aj, bj);t++){
+//				System.out.println(ai+" "+t);
 				if(dc.map[ai][t]==true){
 					return false;
 				}
@@ -75,6 +77,7 @@ public class Block extends JButton implements ActionListener {
 		}
 		if(aj==bj){
 			for(int t=Math.min(ai, bi);t<=Math.max(ai, bi);t++){
+//				System.out.println(aj+" "+t);
 				if(dc.map[t][aj]==true){
 					return false;
 				}
