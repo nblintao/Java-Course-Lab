@@ -1,14 +1,12 @@
 package lianliankan;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.SwingConstants;
 
 public class Block extends JButton implements ActionListener {
 	private static final long serialVersionUID = 1963880243205418028L;
@@ -21,8 +19,8 @@ public class Block extends JButton implements ActionListener {
 		this.i = i;
 		this.j = j;
 		dc.map[i][j] = true;
-		type = (int) Math.floor(Math.random()*dc.typeAmount);
-		setIcon(new ImageIcon("./Icon/" + type + ".png"));
+		type = dc.getTpye();
+		setIcon(new ImageIcon("./Icon/" + dc.style + "/" + type + ".png"));
 		this.addActionListener(this);
 	}
 //	setEnabled(boolean b)  
@@ -47,8 +45,43 @@ public class Block extends JButton implements ActionListener {
 	private boolean linkable(Block b1, Block b2) {
 		if(b1.type != b2.type)
 			return false;
-		
-		return true;
+		dc.map[b1.i][b1.j]=false;
+		dc.map[b2.i][b2.j]=false;		
+		for(int ai=0;ai<=dc.height;ai++){
+			for(int aj=0;aj<=dc.width;aj++){
+				for(int bi=0;bi<=dc.height;bi++){
+					for(int bj=0;bj<=dc.width;bj++){
+						if(line(b1.i,b1.j,ai,aj)&&line(ai,aj,bi,bj)&&line(bi,bj,b2.i,b2.j)){
+							dc.map[b1.i][b1.j]=true;
+							dc.map[b2.i][b2.j]=true;
+							return true;
+						}
+					}
+				}
+			}
+		}
+		dc.map[b1.i][b1.j]=true;
+		dc.map[b2.i][b2.j]=true;
+		return false;
+	}
+	private boolean line(int ai, int aj, int bi, int bj) {
+		if(ai==bi){
+			for(int t=Math.min(aj, bj);t<=Math.max(aj, bj);t++){
+				if(dc.map[ai][t]==true){
+					return false;
+				}
+			}
+			return true;
+		}
+		if(aj==bj){
+			for(int t=Math.min(ai, bi);t<=Math.max(ai, bi);t++){
+				if(dc.map[t][aj]==true){
+					return false;
+				}
+			}
+			return true;
+		}		
+		return false;
 	}
 	private void select() {
 		dc.selectedBlock = this;
