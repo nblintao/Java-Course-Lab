@@ -21,7 +21,6 @@ public class Client{
 	}
 	private void InitializeLayout() {
 		Container content = frame.getContentPane();
-
 		
 		content.setLayout(new GridLayout(dc.height, dc.width));
 		
