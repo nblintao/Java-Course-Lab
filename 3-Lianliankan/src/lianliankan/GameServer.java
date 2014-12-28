@@ -1,6 +1,8 @@
 package lianliankan;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -11,16 +13,11 @@ public class GameServer {
 		server = new ServerSocket(9999);
 		while(true){
 			client=server.accept();
-			
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+			System.out.println("xie:ni hou a!");
+			bw.write("ni hou a!");
+			bw.close();
 		}
 		
-	}
-	public static void main(){
-		GameServer gs = new GameServer();
-		try {
-			gs.start();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }
