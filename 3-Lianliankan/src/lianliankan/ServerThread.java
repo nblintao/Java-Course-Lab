@@ -1,14 +1,17 @@
 package lianliankan;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 public class ServerThread extends Thread {
 	DataCenter dc;
 	Socket client;
+	BufferedWriter bw;	
 	public ServerThread(DataCenter dc, Socket client) {
 		this.dc = dc;
 		this.client = client;
@@ -16,16 +19,24 @@ public class ServerThread extends Thread {
 	}
 
 	public void run(){
-		//BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-		BufferedReader br;		
+		BufferedReader br;
+		
 		ObjectOutputStream oos;
 		String line;
 		
-		System.out.println("Server start");
+		System.out.println("Sub-server start");
 		try {
 			br = new BufferedReader(new InputStreamReader(client.getInputStream()));
+
+			
 			oos = new ObjectOutputStream(client.getOutputStream());
 			oos.writeObject(dc);
+//			oos.close();
+			
+			bw = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));			
+			
+			bw.write("hahaha");
+			bw.flush();
 			
 			while(true){
 				line=br.readLine();
@@ -41,8 +52,14 @@ public class ServerThread extends Thread {
 	private void ExecuteInput(String line) {
 		System.out.println(line);
 		String[] cmd = line.split(" ");
-		switch(line){
+		switch(cmd[0]){
 		case "delete":
+			try {
+				bw.write(line);
+				bw.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
 			break;
 			

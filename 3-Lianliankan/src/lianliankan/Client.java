@@ -22,34 +22,52 @@ public class Client{
 	JFrame frame;
 //	DataCenter dc;
 	LocalDataCenter ldc;
+	Socket socket;
 	BufferedReader br;
 	BufferedWriter bw;
-	ObjectInputStream ois;
 	
 	Client(){
 		frame = new JFrame("Lianliankan");
-		try {
-			InitializeSocket();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		InitializeSocket();
+		InitializeDataCenter();
 		InitializeFrame();
 		InitializeLayout();
 		frame.setVisible(true);
-//		while(true){
-//			String line;
-//			line=br.readLine();
-//			if(line != null)
-//				System.out.println(line);
-//		}
+		
+		String line;
+		while(true){
+			try {
+//				System.out.println("000000");
+				line=br.readLine();
+//				System.out.println("111111");
+				if(line != null)
+					System.out.println("aaaa "+line);
+			} catch (IOException e) {
+				System.out.println("222222");
+				e.printStackTrace();
+			}
+		}
 	}
-	private void InitializeSocket() throws Exception {
-		Socket socket = new Socket("127.0.0.1",9999);
-//		br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-		ois = new ObjectInputStream(socket.getInputStream());
-		DataCenter dc = (DataCenter) ois.readObject();
-		ldc = new LocalDataCenter(dc,bw);
+	private void InitializeDataCenter() {
+		ObjectInputStream ois;
+		try {
+			ois = new ObjectInputStream(socket.getInputStream());
+			DataCenter dc = (DataCenter) ois.readObject();
+//			ois.close();
+			ldc = new LocalDataCenter(dc,bw);		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	private void InitializeSocket() {
+		try {
+			socket = new Socket("127.0.0.1",9999);
+			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	private void InitializeLayout() {
 		Container content = frame.getContentPane();

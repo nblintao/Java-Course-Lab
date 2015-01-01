@@ -51,6 +51,9 @@ public class DataCenter implements Serializable{
 		typeAvail[pos] = typeAvail[--typeAvailN];
 		return type;
 	}
+//	public void deletePair(String line) {
+//		
+//	}
 
 	
 }
