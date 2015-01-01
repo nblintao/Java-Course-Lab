@@ -3,6 +3,7 @@ package lianliankan;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -10,16 +11,16 @@ import javax.swing.JButton;
 
 public class Block extends JButton implements ActionListener {
 	private static final long serialVersionUID = 1963880243205418028L;
-	DataCenter dc;
+	LocalDataCenter dc;
 	int type;
 	int i;
 	int j;
-	Block(int i, int j, DataCenter dc){
+	Block(int i, int j, LocalDataCenter dc){
 		this.dc = dc;
 		this.i = i;
 		this.j = j;
 		dc.map[i][j] = true;
-		type = dc.getTpye();
+		type = dc.getType(i,j);
 		setIcon(new ImageIcon("./Icon/" + dc.style + "/" + type + ".png"));
 		this.addActionListener(this);
 		this.setBorder(null);
@@ -40,7 +41,12 @@ public class Block extends JButton implements ActionListener {
 		}
 	}
 	public void eliminate() {
-		dc.map[i][j] = false;
+//		dc.map[i][j] = false;
+		try {
+			dc.setMapFalse(i,j);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		this.setEnabled(false);
 	}
 	private boolean linkable(Block b1, Block b2) {

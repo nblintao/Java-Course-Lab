@@ -5,9 +5,13 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -16,38 +20,45 @@ import javax.swing.JFrame;
 
 public class Client{
 	JFrame frame;
-	DataCenter dc;
+//	DataCenter dc;
+	LocalDataCenter ldc;
+	BufferedReader br;
+	BufferedWriter bw;
+	ObjectInputStream ois;
 	
 	Client(){
 		frame = new JFrame("Lianliankan");
-		dc = new DataCenter();
+		try {
+			InitializeSocket();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		InitializeFrame();
 		InitializeLayout();
 		frame.setVisible(true);
-		
-		try {
-			Socket socket = new Socket("127.0.0.1",9999);
-			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			while(true){
-				String line;line=br.readLine();
-				if(line != null)
-					System.out.println(line);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-
-		
+//		while(true){
+//			String line;
+//			line=br.readLine();
+//			if(line != null)
+//				System.out.println(line);
+//		}
+	}
+	private void InitializeSocket() throws Exception {
+		Socket socket = new Socket("127.0.0.1",9999);
+//		br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+		ois = new ObjectInputStream(socket.getInputStream());
+		DataCenter dc = (DataCenter) ois.readObject();
+		ldc = new LocalDataCenter(dc,bw);
 	}
 	private void InitializeLayout() {
 		Container content = frame.getContentPane();
 		
-		content.setLayout(new GridLayout(dc.height, dc.width));
+		content.setLayout(new GridLayout(ldc.height, ldc.width));
 		
-		for(int i=0;i<dc.height;i++){
-			for(int j=0;j<dc.width;j++){
-				content.add(new Block(i, j, dc));
+		for(int i=0;i<ldc.height;i++){
+			for(int j=0;j<ldc.width;j++){
+				content.add(new Block(i, j, ldc));
 			}
 		}
 		
