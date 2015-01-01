@@ -34,6 +34,7 @@ public class Block extends JButton implements ActionListener {
 			select();
 		}else{
 			if(linkable(this, dc.selectedBlock)){
+				dc.setMapFalse(this, dc.selectedBlock);
 				this.eliminate();
 				dc.selectedBlock.eliminate();
 			}
@@ -42,11 +43,6 @@ public class Block extends JButton implements ActionListener {
 	}
 	public void eliminate() {
 //		dc.map[i][j] = false;
-		try {
-			dc.setMapFalse(i,j);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		this.setEnabled(false);
 	}
 	private boolean linkable(Block b1, Block b2) {

@@ -74,8 +74,8 @@ public class Client{
 	}
 
 	public static void main(String[] argv){
-		ServerThread serverThread = new ServerThread();
-		serverThread.start();
+		ServerMainThread serverMainThread = new ServerMainThread();
+		serverMainThread.start();
 		Client client = new Client();
 	}
 }

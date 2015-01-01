@@ -16,23 +16,12 @@ public class GameServer {
 	DataCenter dc;
 	public void start() throws IOException{
 		server = new ServerSocket(9999);
+		System.out.println("Server start");
 		dc = new DataCenter();
 		while(true){
 			client=server.accept();
-			//BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-			BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
-			System.out.println("Server start");
-			
-			ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
-			oos.writeObject(dc);
-			
-			while(true){
-				String line;
-				line=br.readLine();
-				if(line != null)
-					System.out.println(line);
-			}
-			//bw.close();
+			System.out.println("Server accept new client");
+			ServerThread st = new ServerThread(dc, client);
 		}
 		
 	}

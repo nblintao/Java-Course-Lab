@@ -24,10 +24,15 @@ public class LocalDataCenter {
 	public int getType(int i,int j){
 		return typeReco[i][j];
 	}
-	public void setMapFalse(int i, int j) throws IOException {
-		bw.write("delete "+i+' '+j+'\n');
-		bw.flush();
-		map[i][j]=false;
+	public void setMapFalse(Block x, Block y) {
+		try {
+			bw.write("delete "+x.i+' '+x.j+' '+y.i+' '+y.j+' '+'\n');
+			bw.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+//		map[x.i][x.j]=false;
+//		map[y.i][y.j]=false;
 	}
 	
 }
