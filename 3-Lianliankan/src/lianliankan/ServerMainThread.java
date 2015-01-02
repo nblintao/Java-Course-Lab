@@ -24,9 +24,9 @@ public class ServerMainThread extends Thread {
 			Socket client;
 			try {
 				client = server.accept();
-				dc.clientList.add(client);
 				System.out.println("Server accept new client");
 				ServerThread st = new ServerThread(dc, client);
+				dc.serverThreadList.add(st);
 				st.start();
 			} catch (IOException e) {
 				e.printStackTrace();

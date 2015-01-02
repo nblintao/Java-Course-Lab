@@ -3,6 +3,8 @@ package lianliankan;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
+import javax.swing.JLabel;
+
 public class LocalDataCenter {
 	int style;
 	int height,width;
@@ -13,6 +15,8 @@ public class LocalDataCenter {
 	Block[][] blockCollection;
 	
 	BufferedWriter bw;
+	JLabel theScore;
+	
 	public LocalDataCenter(String[] cmd, BufferedWriter bw) {
 		initializeData(cmd);
 		this.bw = bw;

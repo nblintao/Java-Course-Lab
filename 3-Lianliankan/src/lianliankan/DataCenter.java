@@ -1,8 +1,7 @@
 package lianliankan;
 
-import java.io.BufferedWriter;
 import java.io.Serializable;
-import java.net.Socket;
+import java.util.Iterator;
 import java.util.Vector;
 
 public class DataCenter implements Serializable{
@@ -21,14 +20,14 @@ public class DataCenter implements Serializable{
 	boolean[][] map;
 	int[][] typeReco;
 	
-	Vector<Socket> clientList;
-	Vector<BufferedWriter> bufferedWriterList;
+	final int scoreForPair = 100;
+	
+	Vector<ServerThread> serverThreadList;
 
 	DataCenter(){
 		map = new boolean[height][width];
 		typeReco = new int[height][width];
-		clientList = new Vector<Socket>();
-		bufferedWriterList = new Vector<BufferedWriter>();
+		serverThreadList = new Vector<ServerThread>();
 		
 		generateType();
 		setAllType();
@@ -80,8 +79,17 @@ public class DataCenter implements Serializable{
 				info += " " + Integer.toString(typeReco[i][j]);
 			}
 		}
+		return info;		
+	}
+	public String getScoreInfo(){
+		String info = "score ";
+		info += serverThreadList.size();
+		Iterator<ServerThread> it = serverThreadList.iterator();
+		while(it.hasNext()){
+			ServerThread st = it.next();
+			info += " " + st.id + " " + st.score;
+		}
 		return info;
-		
 	}
 
 	

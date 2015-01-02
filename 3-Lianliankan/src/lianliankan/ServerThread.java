@@ -11,10 +11,16 @@ import java.util.Iterator;
 public class ServerThread extends Thread {
 	DataCenter dc;
 	Socket client;
-	BufferedWriter bw;	
+	BufferedWriter bw;
+	int id;
+	int score;
+	static int nextId = 0;
+	
 	public ServerThread(DataCenter dc, Socket client) {
 		this.dc = dc;
 		this.client = client;
+		id = nextId++;
+		score = 0;
 	}
 
 	public void run(){
@@ -32,9 +38,7 @@ public class ServerThread extends Thread {
 //			oos.close();
 			
 			bw = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));			
-			
-			dc.bufferedWriterList.add(bw);			
-			
+
 			bw.write(dc.getInfo()+'\n');
 			bw.flush();
 			
@@ -43,28 +47,35 @@ public class ServerThread extends Thread {
 				if(line != null){
 					executeInput(line);
 				}
-			}			
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void executeInput(String line) {
-		System.out.println(line);
+		System.out.println("Server receive: "+line);
 		String[] cmd = line.split(" ");
 		switch(cmd[0]){
 		case "delete":
-			sendToAll(line);		
+			deletePair(line);
 			break;			
 		default:
 			System.out.println("Unknown command");				
 		}
 	}
 
+	private void deletePair(String line) {
+		sendToAll(line);
+		score += dc.scoreForPair;
+		sendToAll(dc.getScoreInfo());
+	}
+
 	private void sendToAll(String line) {
-		Iterator<BufferedWriter> it = dc.bufferedWriterList.iterator();
+		System.out.println("Send to all: "+line);
+		Iterator<ServerThread> it = dc.serverThreadList.iterator();
 		while(it.hasNext()){
-			BufferedWriter bw = it.next();
+			BufferedWriter bw = it.next().bw;
 			try {
 				bw.write(line+'\n');
 				bw.flush();
