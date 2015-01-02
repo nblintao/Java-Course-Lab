@@ -33,8 +33,7 @@ public class ServerThread extends Thread {
 			
 			bw = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));			
 			
-			
-			bw.write(dc.getInfo());
+			bw.write(dc.getInfo()+'\n');
 			bw.flush();
 			
 //			bw.write("hahaha");
@@ -57,14 +56,12 @@ public class ServerThread extends Thread {
 		switch(cmd[0]){
 		case "delete":
 			try {
-				bw.write(line);
+				bw.write(line+'\n');
 				bw.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
-			
-			break;
-			
+			}			
+			break;			
 		default:
 			System.out.println("Unknown command");
 				

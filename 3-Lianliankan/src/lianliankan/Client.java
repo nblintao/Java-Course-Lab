@@ -21,46 +21,59 @@ public class Client{
 	Socket socket;
 	BufferedReader br;
 	BufferedWriter bw;
+	boolean onGoing;
 	
 	Client(){
-		frame = new JFrame("Lianliankan");
+		onGoing = false;
 		InitializeSocket();
-		InitializeDataCenter();
-		InitializeFrame();
-		InitializeLayout();
-		frame.setVisible(true);
 		
 		String line;
 		while(true){
 			try {
-//				System.out.println("000000");
 				line=br.readLine();
-//				System.out.println("111111");
 				if(line != null)
-					System.out.println("aaaa "+line);
+					ReceiveCommand(line);
 			} catch (IOException e) {
-				System.out.println("222222");
 				e.printStackTrace();
 			}
 		}
 	}
-	private void InitializeDataCenter() {
-//		ObjectInputStream ois;
-		try {
-//			ois = new ObjectInputStream(socket.getInputStream());
-//			DataCenter dc = (DataCenter) ois.readObject();
-//			ois.close();
-			String line;
-			while((line = br.readLine())!=null){
-				if(line.split(" ")[0].equals("GameInitialize")){
-					ldc = new LocalDataCenter(line,bw);
-					break;
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+	private void ReceiveCommand(String line) {
+		String[] cmd = line.split(" ");
+		switch(cmd[0]){
+		case "GameInitialize":
+			GameInitialize(cmd);
+			break;
+		case "delete":
+			Delete(cmd);
+			break;
 		}
-		
+	}
+	private void Delete(String[] cmd) {
+		if(onGoing==false){
+			System.out.println("The game hasn't been initialized.");
+			return;
+		}
+		int xi,xj,yi,yj;
+		xi = Integer.parseInt(cmd[1]);
+		xj = Integer.parseInt(cmd[2]);
+		yi = Integer.parseInt(cmd[3]);
+		yj = Integer.parseInt(cmd[4]);
+		ldc.pullMapFalse(xi,xj,yi,yj);
+	}
+	private void GameInitialize(String[] cmd) {
+		InitializeDataCenter(cmd);
+		InitializeFrame();
+		InitializeLayout();
+		frame.setVisible(true);
+		onGoing = true;
+	}
+	private void InitializeDataCenter(String[] cmd) {
+//		ObjectInputStream ois;
+//		ois = new ObjectInputStream(socket.getInputStream());
+//		DataCenter dc = (DataCenter) ois.readObject();
+//		ois.close();
+		ldc = new LocalDataCenter(cmd,bw);
 	}
 	private void InitializeSocket() {
 		try {
@@ -77,13 +90,15 @@ public class Client{
 		content.setLayout(new GridLayout(ldc.height, ldc.width));
 		
 		for(int i=0;i<ldc.height;i++){
-			for(int j=0;j<ldc.width;j++){
-				content.add(new Block(i, j, ldc));
+			for(int j=0;j<ldc.width;j++){				
+				content.add(ldc.blockCollection[i][j]);
 			}
 		}
 		
 	}
 	public void InitializeFrame(){
+		frame = new JFrame("Lianliankan");
+		
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		
 		Toolkit toolkit = frame.getToolkit();
@@ -96,6 +111,6 @@ public class Client{
 	public static void main(String[] argv){
 		ServerMainThread serverMainThread = new ServerMainThread();
 		serverMainThread.start();
-		Client client = new Client();
+		new Client();
 	}
 }

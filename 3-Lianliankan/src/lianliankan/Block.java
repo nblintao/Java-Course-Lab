@@ -33,17 +33,17 @@ public class Block extends JButton implements ActionListener {
 			select();
 		}else{
 			if(linkable(this, dc.selectedBlock)){
-				dc.setMapFalse(this, dc.selectedBlock);
-				this.eliminate();
-				dc.selectedBlock.eliminate();
+				dc.pushMapFalse(this, dc.selectedBlock);
+//				this.eliminate();
+//				dc.selectedBlock.eliminate();
 			}
 			dc.selectedBlock.unselect();
 		}
 	}
-	public void eliminate() {
-//		dc.map[i][j] = false;
-		this.setEnabled(false);
-	}
+//	public void eliminate() {
+////		dc.map[i][j] = false;
+//		this.setEnabled(false);
+//	}
 	private boolean linkable(Block b1, Block b2) {
 		if(b1.type != b2.type)
 			return false;
