@@ -54,6 +54,26 @@ public class DataCenter implements Serializable{
 //	public void deletePair(String line) {
 //		
 //	}
+	public String getInfo() {
+		String info = "";
+//		info = new String[4+2*width*height];
+		info += "GameInitialize";
+		info += " " + Integer.toString(style);
+		info += " " + Integer.toString(height);
+		info += " " + Integer.toString(width);
+		for(int i=0;i<height;i++){
+			for(int j=0;j<width;j++){
+				info += " " + Boolean.toString(map[i][j]);
+			}
+		}
+		for(int i=0;i<height;i++){
+			for(int j=0;j<width;j++){
+				info += " " + Integer.toString(typeReco[i][j]);
+			}
+		}
+		return info;
+		
+	}
 
 	
 }

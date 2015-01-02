@@ -6,14 +6,10 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import javax.swing.JFrame;
 
@@ -49,12 +45,18 @@ public class Client{
 		}
 	}
 	private void InitializeDataCenter() {
-		ObjectInputStream ois;
+//		ObjectInputStream ois;
 		try {
-			ois = new ObjectInputStream(socket.getInputStream());
-			DataCenter dc = (DataCenter) ois.readObject();
+//			ois = new ObjectInputStream(socket.getInputStream());
+//			DataCenter dc = (DataCenter) ois.readObject();
 //			ois.close();
-			ldc = new LocalDataCenter(dc,bw);		
+			String line;
+			while((line = br.readLine())!=null){
+				if(line.split(" ")[0].equals("GameInitialize")){
+					ldc = new LocalDataCenter(line,bw);
+					break;
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

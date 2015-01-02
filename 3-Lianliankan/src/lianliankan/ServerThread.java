@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
@@ -15,13 +14,12 @@ public class ServerThread extends Thread {
 	public ServerThread(DataCenter dc, Socket client) {
 		this.dc = dc;
 		this.client = client;
-		start();
 	}
 
 	public void run(){
 		BufferedReader br;
 		
-		ObjectOutputStream oos;
+//		ObjectOutputStream oos;
 		String line;
 		
 		System.out.println("Sub-server start");
@@ -29,14 +27,18 @@ public class ServerThread extends Thread {
 			br = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
 			
-			oos = new ObjectOutputStream(client.getOutputStream());
-			oos.writeObject(dc);
+//			oos = new ObjectOutputStream(client.getOutputStream());
+//			oos.writeObject(dc);
 //			oos.close();
 			
 			bw = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));			
 			
-			bw.write("hahaha");
+			
+			bw.write(dc.getInfo());
 			bw.flush();
+			
+//			bw.write("hahaha");
+//			bw.flush();
 			
 			while(true){
 				line=br.readLine();

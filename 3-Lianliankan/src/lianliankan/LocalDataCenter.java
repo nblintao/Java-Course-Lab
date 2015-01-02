@@ -12,12 +12,25 @@ public class LocalDataCenter {
 	Block selectedBlock;
 	
 	BufferedWriter bw;
-	public LocalDataCenter(DataCenter dc, BufferedWriter bw) {
-		style = dc.style;
-		height = dc.height;
-		width = dc.width;
-		map = dc.map;
-		typeReco = dc.typeReco;
+	public LocalDataCenter(String line, BufferedWriter bw) {
+		String[] info = line.split(" ");
+		assert(info[0].equals("GameInitialize"));
+		style = Integer.parseInt(info[1]);
+		height = Integer.parseInt(info[2]);
+		width = Integer.parseInt(info[3]);
+		map = new boolean[height][width];
+		typeReco = new int[height][width];
+		int p=4;
+		for(int i=0;i<height;i++){
+			for(int j=0;j<width;j++){
+				map[i][j] = Boolean.parseBoolean(info[p++]);
+			}
+		}
+		for(int i=0;i<height;i++){
+			for(int j=0;j<width;j++){
+				typeReco[i][j] = Integer.parseInt(info[p++]);
+			}
+		}		
 		
 		this.bw = bw;
 	}
