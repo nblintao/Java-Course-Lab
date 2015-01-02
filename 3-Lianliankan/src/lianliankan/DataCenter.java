@@ -1,6 +1,9 @@
 package lianliankan;
 
+import java.io.BufferedWriter;
 import java.io.Serializable;
+import java.net.Socket;
+import java.util.Vector;
 
 public class DataCenter implements Serializable{
 	private static final long serialVersionUID = 253396117256003169L;
@@ -17,10 +20,16 @@ public class DataCenter implements Serializable{
 //	Block selectedBlock = null;
 	boolean[][] map;
 	int[][] typeReco;
+	
+	Vector<Socket> clientList;
+	Vector<BufferedWriter> bufferedWriterList;
 
 	DataCenter(){
 		map = new boolean[height][width];
 		typeReco = new int[height][width];
+		clientList = new Vector<Socket>();
+		bufferedWriterList = new Vector<BufferedWriter>();
+		
 		generateType();
 		setAllType();
 	}

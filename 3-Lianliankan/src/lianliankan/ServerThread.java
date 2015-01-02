@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Iterator;
 
 public class ServerThread extends Thread {
 	DataCenter dc;
@@ -25,7 +26,6 @@ public class ServerThread extends Thread {
 		System.out.println("Sub-server start");
 		try {
 			br = new BufferedReader(new InputStreamReader(client.getInputStream()));
-
 			
 //			oos = new ObjectOutputStream(client.getOutputStream());
 //			oos.writeObject(dc);
@@ -33,16 +33,15 @@ public class ServerThread extends Thread {
 			
 			bw = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));			
 			
+			dc.bufferedWriterList.add(bw);			
+			
 			bw.write(dc.getInfo()+'\n');
 			bw.flush();
-			
-//			bw.write("hahaha");
-//			bw.flush();
 			
 			while(true){
 				line=br.readLine();
 				if(line != null){
-					ExecuteInput(line);
+					executeInput(line);
 				}
 			}			
 		} catch (IOException e) {
@@ -50,21 +49,28 @@ public class ServerThread extends Thread {
 		}
 	}
 
-	private void ExecuteInput(String line) {
+	private void executeInput(String line) {
 		System.out.println(line);
 		String[] cmd = line.split(" ");
 		switch(cmd[0]){
 		case "delete":
+			sendToAll(line);		
+			break;			
+		default:
+			System.out.println("Unknown command");				
+		}
+	}
+
+	private void sendToAll(String line) {
+		Iterator<BufferedWriter> it = dc.bufferedWriterList.iterator();
+		while(it.hasNext()){
+			BufferedWriter bw = it.next();
 			try {
 				bw.write(line+'\n');
 				bw.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}			
-			break;			
-		default:
-			System.out.println("Unknown command");
-				
 		}
 	}
 }

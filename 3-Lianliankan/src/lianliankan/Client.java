@@ -14,7 +14,7 @@ import java.net.Socket;
 import javax.swing.JFrame;
 
 
-public class Client{
+public class Client extends Thread {
 	JFrame frame;
 //	DataCenter dc;
 	LocalDataCenter ldc;
@@ -26,7 +26,9 @@ public class Client{
 	Client(){
 		onGoing = false;
 		InitializeSocket();
-		
+		start();
+	}
+	public void run(){
 		String line;
 		while(true){
 			try {
@@ -36,7 +38,7 @@ public class Client{
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
+		}		
 	}
 	private void ReceiveCommand(String line) {
 		String[] cmd = line.split(" ");
@@ -109,8 +111,7 @@ public class Client{
 	}
 
 	public static void main(String[] argv){
-		ServerMainThread serverMainThread = new ServerMainThread();
-		serverMainThread.start();
-		new Client();
+		new ServerMainThread();
+		new ClientMainThread();
 	}
 }
