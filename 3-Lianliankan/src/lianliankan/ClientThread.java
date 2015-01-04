@@ -64,6 +64,15 @@ public class ClientThread extends Thread {
 		case "close":
 			this.frame.dispose();
 			break;
+		case "finish":
+			finish(Integer.parseInt(cmd[1]));
+		}
+	}
+	private void finish(int max) {
+		if(ldc.scoreList.get(ldc.id) == max){
+			ldc.overButton.setText("Win!");
+		}else{
+			ldc.overButton.setText("Lose!");
 		}
 	}
 	private void updateGiveUpInfo(String cmd, String cmd2) {
@@ -182,9 +191,9 @@ public class ClientThread extends Thread {
 		Stop stop = new Stop();
 		new ServerMainThread(stop);
 		new ClientMainThread();
-		while(stop.b){
-			break;
-		}
-		return;
+//		while(stop.b){
+//			break;
+//		}
+//		return;
 	}
 }

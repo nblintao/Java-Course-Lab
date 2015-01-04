@@ -26,11 +26,14 @@ public class DataCenter implements Serializable{
 	
 	ServerMainThread smt;
 	
+	int remain;
+	
 	DataCenter(ServerMainThread smt){
 		map = new boolean[height][width];
 		typeReco = new int[height][width];
 		serverThreadList = new Vector<ServerThread>();
 		this.smt = smt;
+		remain = width * height;
 		
 		generateType();
 		setAllType();

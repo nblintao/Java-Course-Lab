@@ -61,12 +61,25 @@ public class ServerThread extends Thread {
 		switch(cmd[0]){
 		case "delete":
 			deletePair(line);
+			finishOrNot();
 			break;
 		case "giveUp":
 			sayGiveUp();
 			break;
 		default:
 			System.out.println("Unknown command");				
+		}
+	}
+
+	private void finishOrNot() {
+		if(dc.remain == 0){
+			int max = 0;
+			Iterator<ServerThread> it = dc.serverThreadList.iterator();
+			while(it.hasNext()){
+				int theScore = it.next().score;
+				if(theScore>max)max = theScore;
+			}			
+			this.sendToAll("finish " +max);
 		}
 	}
 
@@ -94,6 +107,7 @@ public class ServerThread extends Thread {
 	}
 
 	private void deletePair(String line) {
+		dc.remain-=2;
 		sendToAll(line);
 		score += dc.scoreForPair;
 		sendToAll(dc.getScoreInfo());
