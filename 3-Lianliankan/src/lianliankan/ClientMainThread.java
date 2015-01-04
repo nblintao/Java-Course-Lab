@@ -7,5 +7,6 @@ public class ClientMainThread extends Thread {
 	public void run(){
 		new ClientThread();
 		new ClientThread();
+		new ClientThread();
 	}
 }

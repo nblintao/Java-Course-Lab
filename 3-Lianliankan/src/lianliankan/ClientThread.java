@@ -3,6 +3,8 @@ package lianliankan;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -54,17 +57,34 @@ public class ClientThread extends Thread {
 			break;
 		case "score":
 			updateScore(cmd);
+			break;
+		case "giveUpinfo":
+			updateGiveUpInfo(cmd[1],cmd[2]);
+			break;
+		case "close":
+			this.frame.dispose();
+			break;
 		}
 	}
+	private void updateGiveUpInfo(String cmd, String cmd2) {
+		String msg = cmd + "/" + cmd2;
+		if(ldc.giveUp)
+			ldc.overButton.setText(msg);
+		else
+			ldc.overButton.setText("GiveUp("+msg+")");
+	}
 	private void updateScore(String[] cmd) {
+		ldc.scoreList = new HashMap<Integer, Integer>();
 		int n = Integer.parseInt(cmd[1]);
-		String dispScore = "";
+//		String dispScore = "";
 		for(int i=0;i<n;i++){
 			int id = Integer.parseInt(cmd[2*i + 2]);
 			int score = Integer.parseInt(cmd[2*i + 3]);
-			dispScore += id + ": " + score +"   ";
+//			dispScore += id + ": " + score +"   ";
+			ldc.scoreList.put(id, score);
 		}
-		ldc.theScore.setText(dispScore);
+//		ldc.theScore.setText(dispScore);
+		ldc.updateScoreDisplay();
 	}
 	private void Delete(String[] cmd) {
 		if(onGoing==false){
@@ -108,16 +128,41 @@ public class ClientThread extends Thread {
 		Container mainContent = new Container();
 		mainContent.setLayout(new GridLayout(ldc.height, ldc.width));		
 		for(int i=0;i<ldc.height;i++){
-			for(int j=0;j<ldc.width;j++){				
+			for(int j=0;j<ldc.width;j++){
 				mainContent.add(ldc.blockCollection[i][j]);
 			}
 		}
 		content.add(mainContent, BorderLayout.CENTER);
 		
 		JMenuBar bar = new JMenuBar();
-		JLabel theScore = new JLabel("Game Start!");
-		ldc.theScore = theScore;
-		bar.add(theScore);
+		bar.setLayout(new FlowLayout());
+		
+		@SuppressWarnings("serial")
+		class FontLabel extends JLabel{
+			FontLabel(String s, boolean bold){
+				super(s);
+				if(bold)
+					this.setFont(new Font("微软雅黑",Font.BOLD,16));
+				else
+					this.setFont(new Font("微软雅黑",Font.PLAIN,16));					
+			}
+		}
+		
+		bar.add(new FontLabel("My ID: ",true));
+
+		bar.add(new FontLabel(""+ldc.id, false));
+
+		bar.add(new FontLabel("    My socre: ", true));
+		
+		ldc.myScore = new FontLabel("Game Start!", false);
+		bar.add(ldc.myScore);
+		
+		bar.add(new FontLabel("    Others' socres: ", true));
+		ldc.otherScore = new FontLabel("Game Start!", false);
+		bar.add(ldc.otherScore);
+		
+		ldc.overButton = new OverButton(ldc);
+		bar.add(ldc.overButton);
 		
 		content.add(bar, BorderLayout.SOUTH);		
 	}
@@ -134,7 +179,12 @@ public class ClientThread extends Thread {
 	}
 
 	public static void main(String[] argv){
-		new ServerMainThread();
+		Stop stop = new Stop();
+		new ServerMainThread(stop);
 		new ClientMainThread();
+		while(stop.b){
+			break;
+		}
+		return;
 	}
 }

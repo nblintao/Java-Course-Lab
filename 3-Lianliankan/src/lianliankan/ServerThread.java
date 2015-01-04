@@ -15,12 +15,14 @@ public class ServerThread extends Thread {
 	int id;
 	int score;
 	static int nextId = 0;
+	boolean giveUp;
 	
 	public ServerThread(DataCenter dc, Socket client) {
 		this.dc = dc;
 		this.client = client;
 		id = nextId++;
 		score = 0;
+		giveUp = false;
 	}
 
 	public void run(){
@@ -39,7 +41,7 @@ public class ServerThread extends Thread {
 			
 			bw = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));			
 
-			bw.write(dc.getInfo()+'\n');
+			bw.write(dc.getInfo(id)+'\n');
 			bw.flush();
 			
 			while(true){
@@ -59,10 +61,36 @@ public class ServerThread extends Thread {
 		switch(cmd[0]){
 		case "delete":
 			deletePair(line);
-			break;			
+			break;
+		case "giveUp":
+			sayGiveUp();
+			break;
 		default:
 			System.out.println("Unknown command");				
 		}
+	}
+
+	private void sayGiveUp() {
+		giveUp = true;
+		
+		int count=0;
+		int all=0;
+		Iterator<ServerThread> it = dc.serverThreadList.iterator();
+		while(it.hasNext()){
+			if(it.next().giveUp)
+				count++;
+			all++;
+		}
+		if(count==all){
+			giveUpGame();
+		}else{
+			sendToAll("giveUpinfo " + count + " " + all);
+		}
+	}
+
+	private void giveUpGame() {
+//		dc.smt.stop.b = true;
+		sendToAll("close");
 	}
 
 	private void deletePair(String line) {

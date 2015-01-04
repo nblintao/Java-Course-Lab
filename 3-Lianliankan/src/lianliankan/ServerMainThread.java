@@ -8,8 +8,10 @@ public class ServerMainThread extends Thread {
 	ServerSocket server;
 //	Socket client;
 	DataCenter dc;
-
-	ServerMainThread(){
+	Stop stop;
+	
+	ServerMainThread(Stop stop){
+		this.stop = stop;
 		start();
 	}
 	public void run(){
@@ -19,7 +21,7 @@ public class ServerMainThread extends Thread {
 			e.printStackTrace();
 		}
 		System.out.println("Server start");
-		dc = new DataCenter();
+		dc = new DataCenter(this);
 		while(true){
 			Socket client;
 			try {

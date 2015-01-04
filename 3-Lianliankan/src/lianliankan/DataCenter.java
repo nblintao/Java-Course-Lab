@@ -23,11 +23,14 @@ public class DataCenter implements Serializable{
 	final int scoreForPair = 100;
 	
 	Vector<ServerThread> serverThreadList;
-
-	DataCenter(){
+	
+	ServerMainThread smt;
+	
+	DataCenter(ServerMainThread smt){
 		map = new boolean[height][width];
 		typeReco = new int[height][width];
 		serverThreadList = new Vector<ServerThread>();
+		this.smt = smt;
 		
 		generateType();
 		setAllType();
@@ -62,13 +65,14 @@ public class DataCenter implements Serializable{
 //	public void deletePair(String line) {
 //		
 //	}
-	public String getInfo() {
+	public String getInfo(int id) {
 		String info = "";
 //		info = new String[4+2*width*height];
 		info += "GameInitialize";
 		info += " " + Integer.toString(style);
 		info += " " + Integer.toString(height);
 		info += " " + Integer.toString(width);
+		info += " " + Integer.toString(id);
 		for(int i=0;i<height;i++){
 			for(int j=0;j<width;j++){
 				info += " " + Boolean.toString(map[i][j]);
@@ -91,6 +95,4 @@ public class DataCenter implements Serializable{
 		}
 		return info;
 	}
-
-	
 }
